@@ -1,0 +1,16 @@
+# Imágenes de VM (varios GB) — nunca al repo
+*.ova
+*.vdi
+*.vmdk
+
+# Backups y temporales de CORE
+*.imn.bak
+*~
+.core/
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
