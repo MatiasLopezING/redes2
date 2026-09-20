@@ -1,31 +1,19 @@
-# TPI Redes II
-
-Topología spine-leaf de la **figura 6** de la Práctica 2. Direccionamiento IPv4 + IPv6,
-ruteo estático y capturas.
-
-https://github.com/MatiasLopezING/redes2
+# Redes de Datos II — trabajos prácticos
 
 | | |
 |---|---|
 | Integrantes | |
-| Bloque IPv4 | |
-| Bloque IPv6 | |
-| Entrega | |
+| Materia | Redes de Datos II — Ing. en Computación, UNLP |
 
-## Qué hay acá
+## Trabajos
 
-| | |
-|---|---|
-| `redes-II-ing-practica_2.pdf` | el enunciado — **el TPI es la página 9** |
-| `direccionamiento.md` | el diseño IPv4/IPv6, **el grueso del trabajo** |
-| `configs/` | un `.sh` por nodo |
-| `capturas/` | `.pcap` y screenshots |
-
-Después se suman `topologia.imn` (la topología de CORE) y `informe.md`.
+| | Tema | Estado |
+|---|---|---|
+| [`tp2/`](tp2/) | Direccionamiento IPv4/IPv6, ruteo estático, NAT, capturas | en curso |
 
 ---
 
-## Setup
+## Setup (una vez por persona)
 
 ```bash
 git clone https://github.com/MatiasLopezING/redes2.git
@@ -52,7 +40,7 @@ Todo en `main`, sin ramas.
 git pull --rebase
 # ... trabajar ...
 git add -A
-git commit -m "net2: LANs de 30 y 100 hosts"
+git commit -m "tp2: LANs de 30 y 100 hosts"
 git pull --rebase && git push
 ```
 
@@ -62,20 +50,22 @@ El `--rebase` evita commits de merge. Si hay conflicto en un `.md`: lo arreglás
 **Tres cosas:**
 
 - `git pull --rebase` **antes de tocar nada**. De ahí salen casi todos los quilombos.
-- **El `.imn` lo toca uno a la vez** y avisa por el grupo. Es XML: si dos lo editan en
+- **Los `.imn` los toca uno a la vez** y avisa por el grupo. Es XML: si dos lo editan en
   paralelo, el merge no se puede resolver.
 - **Las configs van en scripts**, no clickeadas en la GUI — lo que se clickea en CORE se
   pierde al cerrar.
 
-**El diseño** (VLSM, IPv6, tablas de ruteo, scripts) se puede hacer cada uno por su
-lado. **La simulación conviene hacerla los tres juntos en una sola sesión**, en la VM de
-uno: el `.imn` es un archivo solo, y armar 35 nodos de a tres —uno dictando del
-`direccionamiento.md`, otro verificando— va mucho más rápido. Las capturas de (e), (f)
-y (h) salen todas de ahí.
+Poné el número de TP al principio del mensaje de commit (`tp2: ...`), así el historial
+se lee solo.
+
+**Cómo dividirlo:** el diseño (direccionamiento, tablas de ruteo, scripts) se puede
+hacer cada uno por su lado. La simulación conviene hacerla **los tres juntos en una sola
+sesión**, en la VM de uno: el `.imn` es un archivo solo y armar la topología de a tres
+—uno dictando direcciones, otro verificando— va mucho más rápido.
 
 ---
 
-## Comandos
+## Comandos de CORE / Linux
 
 ```bash
 # verificar
@@ -83,41 +73,25 @@ ip addr show / ip -6 addr show          # direcciones
 ip route show / ip -6 route show        # tablas de ruteo
 ip -4 neigh show / ip -6 neigh show     # ARP / NDP
 sysctl net.ipv4.ip_forward              # ¿rutea este nodo?
+sysctl net.ipv6.conf.all.forwarding     # ídem IPv6 (viene APAGADO en CORE)
 sysctl net.ipv4.conf.all.rp_filter      # si el ping no va, mirá esto
 
-# tests — punto (d)
+# tests
 ping -c 4 <ip>        ping6 -c 4 <ipv6>      ping -nR <ip>
 traceroute <ip>       traceroute -I <ip>     traceroute6 <ipv6>
 
-# capturas — puntos (e) (f) (h)
-tcpdump -i eth0 -w /media/sf_tpi/capturas/e-n11-n33.pcap 'arp or icmp'
-tcpdump -i eth0 -w /media/sf_tpi/capturas/f-traceroute.pcap 'icmp or udp'
-tcpdump -i eth0 -w /media/sf_tpi/capturas/h-icmpv6.pcap 'icmp6'
+# capturas — guardar en la carpeta compartida para que queden en el repo
+tcpdump -i eth0 -w /media/sf_tpi/tpN/capturas/<nombre>.pcap 'arp or icmp'
+tcpdump -i eth0 -n -p arp               # ver en vivo, sin guardar
 ```
 
-**Qué mirar en cada captura**
+### Si algo no anda
 
-- **(e)** n11 y n33 están en **redes distintas** → n11 hace ARP **del gateway**, no de
-  n33. La IP destino es n33 de punta a punta, la **MAC cambia en cada salto**. Echo
-  Request **8/0**, Reply **0/0**.
-- **(f)** TTL creciente → cada router devuelve **Time Exceeded 11/0**. El destino
-  responde **3/3** si la sonda es UDP (Linux) o **0/0** si es ICMP (Windows).
-- **(h)** **NDP** en vez de ARP: NS **135** / NA **136**, a multicast solicited-node
-  `ff02::1:ffXX:XXXX`. MAC destino `33:33:ff:` + últimos 3 bytes de la IPv6. Hop Limit
-  **255**. Echo Request/Reply **128/129**.
-
----
-
-## Qué falta
-
-- [ ] Direccionamiento IPv4 (VLSM)
-- [ ] IPv6 Net5 / Net6 — **(a)**
-- [ ] Topología en CORE
-- [ ] Ruteo estático IPv4 e IPv6 — **(b)**
-- [ ] ping + traceroute — **(d)**
-- [ ] Captura n11 → n33: ARP e ICMP — **(e)**
-- [ ] Captura del traceroute — **(f)**
-- [ ] IPv6 + ICMPv6 — **(h)**
-- [ ] Informe / presentación
-- [ ] *Alternativo:* NAT en n33 — **(c)**
-- [ ] *Alternativo:* MTU y fragmentación — **(g)**
+| Síntoma | Probable causa |
+|---|---|
+| El ping no pasa de un router | `sysctl -w net.ipv4.ip_forward=1` |
+| Pasa en una dirección pero no en la otra | `sysctl -w net.ipv4.conf.all.rp_filter=0` |
+| IPv6 anda entre vecinos pero no atraviesa un router | `sysctl -w net.ipv6.conf.all.forwarding=1` |
+| IPv6 sigue sin pasar con forwarding en 1 | `ip6tables -P FORWARD ACCEPT` |
+| El nodo dejó de recibir RA al prender forwarding | `sysctl -w net.ipv6.conf.eth0.accept_ra=2` |
+| `ping` a una IP inexistente responde Time Exceeded | **hay un loop de ruteo** |
