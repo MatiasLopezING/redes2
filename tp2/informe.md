@@ -135,52 +135,57 @@ Queda libre `16.0.5.176` – `16.0.5.255` y todo `16.0.6.64` – `16.0.255.255`.
 
 ### Tabla de interfaces
 
+> Los nombres `ethN` están tomados del archivo `topologia.imn`, no asumidos: CORE los
+> asigna según el orden en que se crearon los enlaces. **No son simétricos entre nodos
+> equivalentes** — en leaf1 el enlace a spine1 es `eth2`, mientras que en leaf2, leaf3 y
+> leaf4 es `eth3`.
+
 | Nodo | Interfaz | Segmento | IPv4 | IPv6 |
 |---|---|---|---|---|
-| **n1** | eth0 | LAN Net1-A | `16.0.2.1/24` | – |
-| | eth1 | n1–leaf1 | `16.0.6.1/30` | – |
-| **n2** | eth0 | LAN Net1-B | `16.0.3.1/24` | – |
-| | eth1 | n2–leaf1 | `16.0.6.5/30` | – |
+| **n1** | eth0 | n1–leaf1 | `16.0.6.1/30` | – |
+|  | eth1 | LAN Net1-A | `16.0.2.1/24` | – |
+| **n2** | eth0 | n2–leaf1 | `16.0.6.5/30` | – |
+|  | eth1 | LAN Net1-B | `16.0.3.1/24` | – |
 | **n17** | eth0 | LAN Net2-A | `16.0.4.1/25` | – |
-| | eth1 | n17–leaf2 | `16.0.6.9/30` | – |
+|  | eth1 | n17–leaf2 | `16.0.6.9/30` | – |
 | **n18** | eth0 | LAN Net2-B | `16.0.5.65/27` | – |
-| | eth1 | n18–leaf2 | `16.0.6.13/30` | – |
+|  | eth1 | n18–leaf2 | `16.0.6.13/30` | – |
 | **n21** | eth0 | LAN Net3-A | `16.0.4.129/25` | – |
-| | eth1 | n21–leaf3 | `16.0.6.17/30` | – |
+|  | eth1 | n21–leaf3 | `16.0.6.17/30` | – |
 | **n22** | eth0 | LAN Net3-B | `16.0.5.1/26` | – |
-| | eth1 | n22–leaf3 | `16.0.6.21/30` | – |
+|  | eth1 | n22–leaf3 | `16.0.6.21/30` | – |
 | **n23** | eth0 | LAN Net4-A | `16.0.5.97/27` | – |
-| | eth1 | n23–leaf4 | `16.0.6.25/30` | – |
+|  | eth1 | n23–leaf4 | `16.0.6.25/30` | – |
 | **n24** | eth0 | LAN Net4-B | `16.0.5.129/27` | – |
-| | eth1 | n24–leaf4 | `16.0.6.29/30` | – |
-| **leaf1** | eth0 | n1–leaf1 | `16.0.6.2/30` | – |
-| | eth1 | n2–leaf1 | `16.0.6.6/30` | – |
-| | eth2 | leaf1–spine1 | `16.0.6.33/30` | – |
-| | eth3 | leaf1–spine2 | `16.0.6.37/30` | – |
-| **leaf2** | eth0 | n17–leaf2 | `16.0.6.10/30` | – |
-| | eth1 | n18–leaf2 | `16.0.6.14/30` | – |
-| | eth2 | leaf2–spine1 | `16.0.6.41/30` | – |
-| | eth3 | leaf2–spine2 | `16.0.6.45/30` | – |
-| **leaf3** | eth0 | n21–leaf3 | `16.0.6.18/30` | – |
-| | eth1 | n22–leaf3 | `16.0.6.22/30` | – |
-| | eth2 | leaf3–spine1 | `16.0.6.49/30` | – |
-| | eth3 | leaf3–spine2 | `16.0.6.53/30` | – |
-| **leaf4** | eth0 | n23–leaf4 | `16.0.6.26/30` | – |
-| | eth1 | n24–leaf4 | `16.0.6.30/30` | – |
-| | eth2 | leaf4–spine1 | `16.0.6.57/30` | – |
-| | eth3 | leaf4–spine2 | `16.0.6.61/30` | – |
-| **spine1** | eth0 | leaf1–spine1 | `16.0.6.34/30` | – |
-| | eth1 | leaf2–spine1 | `16.0.6.42/30` | – |
-| | eth2 | leaf3–spine1 | `16.0.6.50/30` | – |
-| | eth3 | leaf4–spine1 | `16.0.6.58/30` | – |
-| | eth4 | **LAN Net5** | `16.0.0.1/23` | `1600:0:0:5::1/64` |
-| | tun6 | túnel 6in4 | – | `1600:0:0:ffff::1/64` |
-| **spine2** | eth0 | leaf1–spine2 | `16.0.6.38/30` | – |
-| | eth1 | leaf2–spine2 | `16.0.6.46/30` | – |
-| | eth2 | leaf3–spine2 | `16.0.6.54/30` | – |
-| | eth3 | leaf4–spine2 | `16.0.6.62/30` | – |
-| | eth4 | **LAN Net6** | `16.0.5.161/28` | `1600:0:0:6::1/64` |
-| | tun6 | túnel 6in4 | – | `1600:0:0:ffff::2/64` |
+|  | eth1 | n24–leaf4 | `16.0.6.29/30` | – |
+| **leaf1 (n7)** | eth0 | n1–leaf1 | `16.0.6.2/30` | – |
+|  | eth1 | n2–leaf1 | `16.0.6.6/30` | – |
+|  | eth2 | leaf1–spine1 | `16.0.6.33/30` | – |
+|  | eth3 | leaf1–spine2 | `16.0.6.37/30` | – |
+| **leaf2 (n8)** | eth0 | n17–leaf2 | `16.0.6.10/30` | – |
+|  | eth1 | n18–leaf2 | `16.0.6.14/30` | – |
+|  | eth2 | leaf2–**spine2** | `16.0.6.45/30` | – |
+|  | eth3 | leaf2–**spine1** | `16.0.6.41/30` | – |
+| **leaf3 (n9)** | eth0 | n21–leaf3 | `16.0.6.18/30` | – |
+|  | eth1 | n22–leaf3 | `16.0.6.22/30` | – |
+|  | eth2 | leaf3–**spine2** | `16.0.6.53/30` | – |
+|  | eth3 | leaf3–**spine1** | `16.0.6.49/30` | – |
+| **leaf4 (n10)** | eth0 | n23–leaf4 | `16.0.6.26/30` | – |
+|  | eth1 | n24–leaf4 | `16.0.6.30/30` | – |
+|  | eth2 | leaf4–**spine2** | `16.0.6.61/30` | – |
+|  | eth3 | leaf4–**spine1** | `16.0.6.57/30` | – |
+| **spine1 (n5)** | eth0 | leaf1–spine1 | `16.0.6.34/30` | – |
+|  | eth1 | **LAN Net5** | `16.0.0.1/23` | `1600:0:0:5::1/64` |
+|  | eth2 | leaf2–spine1 | `16.0.6.42/30` | – |
+|  | eth3 | leaf3–spine1 | `16.0.6.50/30` | – |
+|  | eth4 | leaf4–spine1 | `16.0.6.58/30` | – |
+|  | tun6 | túnel 6in4 | – | `1600:0:0:ffff::1/64` |
+| **spine2 (n6)** | eth0 | leaf4–spine2 | `16.0.6.62/30` | – |
+|  | eth1 | leaf3–spine2 | `16.0.6.54/30` | – |
+|  | eth2 | **LAN Net6** | `16.0.5.161/28` | `1600:0:0:6::1/64` |
+|  | eth3 | leaf2–spine2 | `16.0.6.46/30` | – |
+|  | eth4 | leaf1–spine2 | `16.0.6.38/30` | – |
+|  | tun6 | túnel 6in4 | – | `1600:0:0:ffff::2/64` |
 | **n11** | eth0 | LAN Net1-A | `16.0.2.10/24` | – |
 | **n12** | eth0 | LAN Net1-B | `16.0.3.10/24` | – |
 | **n13** | eth0 | LAN Net2-A | `16.0.4.10/25` | – |
@@ -188,13 +193,13 @@ Queda libre `16.0.5.176` – `16.0.5.255` y todo `16.0.6.64` – `16.0.255.255`.
 | **n29** | eth0 | LAN Net3-A | `16.0.4.140/25` | – |
 | **n30** | eth0 | LAN Net3-B | `16.0.5.10/26` | – |
 | **n31** | eth0 | LAN Net4-A | `16.0.5.100/27` | – |
-| **n32** | eth0 | LAN Net4-A | `16.0.5.101/27` | – |
+| **n32** | eth0 | LAN Net4-B | `16.0.5.131/27` | – |
 | **n33** | eth0 | LAN Net4-B | `16.0.5.130/27` | – |
 | **n34** | eth0 | LAN Net5 | `16.0.0.10/23` | `1600:0:0:5::10/64` |
 | **n35** | eth0 | LAN Net6 | `16.0.5.170/28` | `1600:0:0:6::10/64` |
 
-*Los hubs (n3, n4, n19, n20, n25–n28) y los switches (n15, n16) no llevan dirección IP:
-operan en capa 1 y capa 2 respectivamente.*
+*Los hubs (n3, n4, n19, n20, n25–n28) y los switches (n15, n16) no llevan dirección
+IP: operan en capa 1 y capa 2 respectivamente.*
 
 ---
 
@@ -206,9 +211,9 @@ están reservados al *Interface ID* y no se subnetean.
 
 | Red | Prefijo | Nodo | Dirección |
 |---|---|---|---|
-| LAN Net5 | `1600:0:0:5::/64` | spine1 eth4 | `1600:0:0:5::1/64` |
+| LAN Net5 | `1600:0:0:5::/64` | spine1 eth1 | `1600:0:0:5::1/64` |
 | | | n34 | `1600:0:0:5::10/64` |
-| LAN Net6 | `1600:0:0:6::/64` | spine2 eth4 | `1600:0:0:6::1/64` |
+| LAN Net6 | `1600:0:0:6::/64` | spine2 eth2 | `1600:0:0:6::1/64` |
 | | | n35 | `1600:0:0:6::10/64` |
 | Túnel 6in4 | `1600:0:0:ffff::/64` | spine1 tun6 | `1600:0:0:ffff::1/64` |
 | | | spine2 tun6 | `1600:0:0:ffff::2/64` |
@@ -230,14 +235,14 @@ Como extremos del túnel se usan las interfaces IPv4 de cada spine hacia leaf1:
 
 ```bash
 # spine1
-ip -6 addr add 1600:0:0:5::1/64 dev eth4
+ip -6 addr add 1600:0:0:5::1/64 dev eth1
 ip tunnel add tun6 mode sit remote 16.0.6.38 local 16.0.6.34 ttl 64
 ip link set tun6 up
 ip -6 addr add 1600:0:0:ffff::1/64 dev tun6
 ip -6 route add 1600:0:0:6::/64 dev tun6
 
 # spine2
-ip -6 addr add 1600:0:0:6::1/64 dev eth4
+ip -6 addr add 1600:0:0:6::1/64 dev eth2
 ip tunnel add tun6 mode sit remote 16.0.6.34 local 16.0.6.38 ttl 64
 ip link set tun6 up
 ip -6 addr add 1600:0:0:ffff::2/64 dev tun6
@@ -278,6 +283,36 @@ cuelgan de leafs conectados a ambos spines, por lo que alcanzan Net5 y Net6 dire
 El único par que requiere cruzar de un spine al otro es **Net5 ↔ Net6**, y se resuelve
 con una ruta específica a través de leaf1.
 
+### Las redes de tránsito
+
+Una primera versión de las tablas de los spines incluía únicamente las LANs. Al probar
+conectividad extremo a extremo entre `n1` y `n24` el ping fallaba con 100 % de pérdida,
+pero el mismo ping forzando la dirección de origen a la LAN (`ping -I 16.0.2.1`)
+funcionaba con TTL 61.
+
+El diagnóstico es que **el camino de ida era correcto y el de vuelta no**: al enviar el
+datagrama, `n1` lo emite con dirección de origen `16.0.6.1` —la interfaz del enlace
+punto a punto, porque es la que usa para salir—. `n24` responde a esa dirección, pero al
+llegar la respuesta a spine1, este no tenía ruta hacia la red `16.0.6.0/30` y descartaba
+el datagrama.
+
+Se agregaron entonces las rutas hacia las **redes de tránsito**. El direccionamiento
+permitió **sumarizarlas**: los dos enlaces de cada leaf quedaron contiguos y alineados,
+por lo que cada par de `/30` se agrupa en un único `/29`.
+
+| Leaf | Enlaces hacia abajo | Enlaces hacia arriba |
+|---|---|---|
+| leaf1 | `16.0.6.0/30` + `16.0.6.4/30` → **`16.0.6.0/29`** | `16.0.6.32/30` + `16.0.6.36/30` → **`16.0.6.32/29`** |
+| leaf2 | `16.0.6.8/30` + `16.0.6.12/30` → **`16.0.6.8/29`** | `16.0.6.40/30` + `16.0.6.44/30` → **`16.0.6.40/29`** |
+| leaf3 | `16.0.6.16/30` + `16.0.6.20/30` → **`16.0.6.16/29`** | `16.0.6.48/30` + `16.0.6.52/30` → **`16.0.6.48/29`** |
+| leaf4 | `16.0.6.24/30` + `16.0.6.28/30` → **`16.0.6.24/29`** | `16.0.6.56/30` + `16.0.6.60/30` → **`16.0.6.56/29`** |
+
+De este modo cada spine incorpora **8 rutas** en lugar de 16, y la tabla refleja la
+jerarquía de la topología: cada `/29` identifica a un leaf.
+
+Los leafs no necesitan estas rutas: alcanzan los enlaces de las otras ramas por su ruta
+por defecto hacia spine1.
+
 
 ### Tablas de ruteo IPv4
 
@@ -287,17 +322,17 @@ con una ruta específica a través de leaf1.
 
 | Destino | Next hop | Máscara | Interfaz |
 |---|---|---|---|
-| 16.0.2.0/24 (su LAN) | – | 255.255.255.0 | eth0 |
-| 16.0.6.0/30 (n1–leaf1) | – | 255.255.255.252 | eth1 |
-| **default** | **16.0.6.2** (leaf1) | 0.0.0.0 | eth1 |
+| 16.0.2.0/24 (su LAN) | – | 255.255.255.0 | eth1 |
+| 16.0.6.0/30 (n1–leaf1) | – | 255.255.255.252 | eth0 |
+| **default** | **16.0.6.2** (leaf1) | 0.0.0.0 | eth0 |
 
 **n2**
 
 | Destino | Next hop | Máscara | Interfaz |
 |---|---|---|---|
-| 16.0.3.0/24 (su LAN) | – | 255.255.255.0 | eth0 |
-| 16.0.6.4/30 (n2–leaf1) | – | 255.255.255.252 | eth1 |
-| **default** | **16.0.6.6** (leaf1) | 0.0.0.0 | eth1 |
+| 16.0.3.0/24 (su LAN) | – | 255.255.255.0 | eth1 |
+| 16.0.6.4/30 (n2–leaf1) | – | 255.255.255.252 | eth0 |
+| **default** | **16.0.6.6** (leaf1) | 0.0.0.0 | eth0 |
 
 **n17**
 
@@ -357,9 +392,9 @@ con una ruta específica a través de leaf1.
 | 16.0.6.4/30 (n2–leaf1) | – | 255.255.255.252 | eth1 |
 | 16.0.6.32/30 (leaf1–spine1) | – | 255.255.255.252 | eth2 |
 | 16.0.6.36/30 (leaf1–spine2) | – | 255.255.255.252 | eth3 |
-| 16.0.2.0/24 (LAN de n1) | 16.0.6.1 (n1) | 255.255.255.0 | eth0 |
-| 16.0.3.0/24 (LAN de n2) | 16.0.6.5 (n2) | 255.255.255.0 | eth1 |
-| 16.0.5.160/28 (Net6) | 16.0.6.38 (spine2) | 255.255.255.240 | eth3 |
+| 16.0.2.0/24 (Net1-A, vía n1) | 16.0.6.1 | 255.255.255.0 | eth0 |
+| 16.0.3.0/24 (Net1-B, vía n2) | 16.0.6.5 | 255.255.255.0 | eth1 |
+| 16.0.5.160/28 (Net6, vía spine2) | 16.0.6.38 | 255.255.255.240 | eth3 |
 | **default** | **16.0.6.34** (spine1) | 0.0.0.0 | eth2 |
 
 **leaf2**
@@ -368,11 +403,11 @@ con una ruta específica a través de leaf1.
 |---|---|---|---|
 | 16.0.6.8/30 (n17–leaf2) | – | 255.255.255.252 | eth0 |
 | 16.0.6.12/30 (n18–leaf2) | – | 255.255.255.252 | eth1 |
-| 16.0.6.40/30 (leaf2–spine1) | – | 255.255.255.252 | eth2 |
-| 16.0.6.44/30 (leaf2–spine2) | – | 255.255.255.252 | eth3 |
-| 16.0.4.0/25 (LAN de n17) | 16.0.6.9 (n17) | 255.255.255.128 | eth0 |
-| 16.0.5.64/27 (LAN de n18) | 16.0.6.13 (n18) | 255.255.255.224 | eth1 |
-| **default** | **16.0.6.42** (spine1) | 0.0.0.0 | eth2 |
+| 16.0.6.44/30 (leaf2–spine2) | – | 255.255.255.252 | eth2 |
+| 16.0.6.40/30 (leaf2–spine1) | – | 255.255.255.252 | eth3 |
+| 16.0.4.0/25 (Net2-A, vía n17) | 16.0.6.9 | 255.255.255.128 | eth0 |
+| 16.0.5.64/27 (Net2-B, vía n18) | 16.0.6.13 | 255.255.255.224 | eth1 |
+| **default** | **16.0.6.42** (spine1) | 0.0.0.0 | eth3 |
 
 **leaf3**
 
@@ -380,11 +415,11 @@ con una ruta específica a través de leaf1.
 |---|---|---|---|
 | 16.0.6.16/30 (n21–leaf3) | – | 255.255.255.252 | eth0 |
 | 16.0.6.20/30 (n22–leaf3) | – | 255.255.255.252 | eth1 |
-| 16.0.6.48/30 (leaf3–spine1) | – | 255.255.255.252 | eth2 |
-| 16.0.6.52/30 (leaf3–spine2) | – | 255.255.255.252 | eth3 |
-| 16.0.4.128/25 (LAN de n21) | 16.0.6.17 (n21) | 255.255.255.128 | eth0 |
-| 16.0.5.0/26 (LAN de n22) | 16.0.6.21 (n22) | 255.255.255.192 | eth1 |
-| **default** | **16.0.6.50** (spine1) | 0.0.0.0 | eth2 |
+| 16.0.6.52/30 (leaf3–spine2) | – | 255.255.255.252 | eth2 |
+| 16.0.6.48/30 (leaf3–spine1) | – | 255.255.255.252 | eth3 |
+| 16.0.4.128/25 (Net3-A, vía n21) | 16.0.6.17 | 255.255.255.128 | eth0 |
+| 16.0.5.0/26 (Net3-B, vía n22) | 16.0.6.21 | 255.255.255.192 | eth1 |
+| **default** | **16.0.6.50** (spine1) | 0.0.0.0 | eth3 |
 
 **leaf4**
 
@@ -392,11 +427,11 @@ con una ruta específica a través de leaf1.
 |---|---|---|---|
 | 16.0.6.24/30 (n23–leaf4) | – | 255.255.255.252 | eth0 |
 | 16.0.6.28/30 (n24–leaf4) | – | 255.255.255.252 | eth1 |
-| 16.0.6.56/30 (leaf4–spine1) | – | 255.255.255.252 | eth2 |
-| 16.0.6.60/30 (leaf4–spine2) | – | 255.255.255.252 | eth3 |
-| 16.0.5.96/27 (LAN de n23) | 16.0.6.25 (n23) | 255.255.255.224 | eth0 |
-| 16.0.5.128/27 (LAN de n24) | 16.0.6.29 (n24) | 255.255.255.224 | eth1 |
-| **default** | **16.0.6.58** (spine1) | 0.0.0.0 | eth2 |
+| 16.0.6.60/30 (leaf4–spine2) | – | 255.255.255.252 | eth2 |
+| 16.0.6.56/30 (leaf4–spine1) | – | 255.255.255.252 | eth3 |
+| 16.0.5.96/27 (Net4-A, vía n23) | 16.0.6.25 | 255.255.255.224 | eth0 |
+| 16.0.5.128/27 (Net4-B, vía n24) | 16.0.6.29 | 255.255.255.224 | eth1 |
+| **default** | **16.0.6.58** (spine1) | 0.0.0.0 | eth3 |
 
 ### Spines
 
@@ -405,38 +440,54 @@ con una ruta específica a través de leaf1.
 | Destino | Next hop | Máscara | Interfaz |
 |---|---|---|---|
 | 16.0.6.32/30 (leaf1) | – | 255.255.255.252 | eth0 |
-| 16.0.6.40/30 (leaf2) | – | 255.255.255.252 | eth1 |
-| 16.0.6.48/30 (leaf3) | – | 255.255.255.252 | eth2 |
-| 16.0.6.56/30 (leaf4) | – | 255.255.255.252 | eth3 |
-| 16.0.0.0/23 (LAN Net5) | – | 255.255.254.0 | eth4 |
+| 16.0.0.0/23 (LAN Net5) | – | 255.255.254.0 | eth1 |
+| 16.0.6.40/30 (leaf2) | – | 255.255.255.252 | eth2 |
+| 16.0.6.48/30 (leaf3) | – | 255.255.255.252 | eth3 |
+| 16.0.6.56/30 (leaf4) | – | 255.255.255.252 | eth4 |
 | 16.0.2.0/24 (Net1-A) | 16.0.6.33 (leaf1) | 255.255.255.0 | eth0 |
 | 16.0.3.0/24 (Net1-B) | 16.0.6.33 (leaf1) | 255.255.255.0 | eth0 |
-| 16.0.4.0/25 (Net2-A) | 16.0.6.41 (leaf2) | 255.255.255.128 | eth1 |
-| 16.0.5.64/27 (Net2-B) | 16.0.6.41 (leaf2) | 255.255.255.224 | eth1 |
-| 16.0.4.128/25 (Net3-A) | 16.0.6.49 (leaf3) | 255.255.255.128 | eth2 |
-| 16.0.5.0/26 (Net3-B) | 16.0.6.49 (leaf3) | 255.255.255.192 | eth2 |
-| 16.0.5.96/27 (Net4-A) | 16.0.6.57 (leaf4) | 255.255.255.224 | eth3 |
-| 16.0.5.128/27 (Net4-B) | 16.0.6.57 (leaf4) | 255.255.255.224 | eth3 |
+| 16.0.4.0/25 (Net2-A) | 16.0.6.41 (leaf2) | 255.255.255.128 | eth2 |
+| 16.0.5.64/27 (Net2-B) | 16.0.6.41 (leaf2) | 255.255.255.224 | eth2 |
+| 16.0.4.128/25 (Net3-A) | 16.0.6.49 (leaf3) | 255.255.255.128 | eth3 |
+| 16.0.5.0/26 (Net3-B) | 16.0.6.49 (leaf3) | 255.255.255.192 | eth3 |
+| 16.0.5.96/27 (Net4-A) | 16.0.6.57 (leaf4) | 255.255.255.224 | eth4 |
+| 16.0.5.128/27 (Net4-B) | 16.0.6.57 (leaf4) | 255.255.255.224 | eth4 |
 | 16.0.5.160/28 (Net6) | 16.0.6.33 (leaf1 → spine2) | 255.255.255.240 | eth0 |
+| 16.0.6.0/29 (enlaces de leaf1) | 16.0.6.33 (leaf1) | 255.255.255.248 | eth0 |
+| 16.0.6.32/29 (enlaces de leaf1) | 16.0.6.33 (leaf1) | 255.255.255.248 | eth0 |
+| 16.0.6.8/29 (enlaces de leaf2) | 16.0.6.41 (leaf2) | 255.255.255.248 | eth2 |
+| 16.0.6.40/29 (enlaces de leaf2) | 16.0.6.41 (leaf2) | 255.255.255.248 | eth2 |
+| 16.0.6.16/29 (enlaces de leaf3) | 16.0.6.49 (leaf3) | 255.255.255.248 | eth3 |
+| 16.0.6.48/29 (enlaces de leaf3) | 16.0.6.49 (leaf3) | 255.255.255.248 | eth3 |
+| 16.0.6.24/29 (enlaces de leaf4) | 16.0.6.57 (leaf4) | 255.255.255.248 | eth4 |
+| 16.0.6.56/29 (enlaces de leaf4) | 16.0.6.57 (leaf4) | 255.255.255.248 | eth4 |
 
 **spine2** — sin ruta por defecto
 
 | Destino | Next hop | Máscara | Interfaz |
 |---|---|---|---|
-| 16.0.6.36/30 (leaf1) | – | 255.255.255.252 | eth0 |
-| 16.0.6.44/30 (leaf2) | – | 255.255.255.252 | eth1 |
-| 16.0.6.52/30 (leaf3) | – | 255.255.255.252 | eth2 |
-| 16.0.6.60/30 (leaf4) | – | 255.255.255.252 | eth3 |
-| 16.0.5.160/28 (LAN Net6) | – | 255.255.255.240 | eth4 |
-| 16.0.2.0/24 (Net1-A) | 16.0.6.37 (leaf1) | 255.255.255.0 | eth0 |
-| 16.0.3.0/24 (Net1-B) | 16.0.6.37 (leaf1) | 255.255.255.0 | eth0 |
-| 16.0.4.0/25 (Net2-A) | 16.0.6.45 (leaf2) | 255.255.255.128 | eth1 |
-| 16.0.5.64/27 (Net2-B) | 16.0.6.45 (leaf2) | 255.255.255.224 | eth1 |
-| 16.0.4.128/25 (Net3-A) | 16.0.6.53 (leaf3) | 255.255.255.128 | eth2 |
-| 16.0.5.0/26 (Net3-B) | 16.0.6.53 (leaf3) | 255.255.255.192 | eth2 |
-| 16.0.5.96/27 (Net4-A) | 16.0.6.61 (leaf4) | 255.255.255.224 | eth3 |
-| 16.0.5.128/27 (Net4-B) | 16.0.6.61 (leaf4) | 255.255.255.224 | eth3 |
-| 16.0.0.0/23 (Net5) | 16.0.6.37 (leaf1 → spine1) | 255.255.254.0 | eth0 |
+| 16.0.6.60/30 (leaf4) | – | 255.255.255.252 | eth0 |
+| 16.0.6.52/30 (leaf3) | – | 255.255.255.252 | eth1 |
+| 16.0.5.160/28 (LAN Net6) | – | 255.255.255.240 | eth2 |
+| 16.0.6.44/30 (leaf2) | – | 255.255.255.252 | eth3 |
+| 16.0.6.36/30 (leaf1) | – | 255.255.255.252 | eth4 |
+| 16.0.2.0/24 (Net1-A) | 16.0.6.37 (leaf1) | 255.255.255.0 | eth4 |
+| 16.0.3.0/24 (Net1-B) | 16.0.6.37 (leaf1) | 255.255.255.0 | eth4 |
+| 16.0.4.0/25 (Net2-A) | 16.0.6.45 (leaf2) | 255.255.255.128 | eth3 |
+| 16.0.5.64/27 (Net2-B) | 16.0.6.45 (leaf2) | 255.255.255.224 | eth3 |
+| 16.0.4.128/25 (Net3-A) | 16.0.6.53 (leaf3) | 255.255.255.128 | eth1 |
+| 16.0.5.0/26 (Net3-B) | 16.0.6.53 (leaf3) | 255.255.255.192 | eth1 |
+| 16.0.5.96/27 (Net4-A) | 16.0.6.61 (leaf4) | 255.255.255.224 | eth0 |
+| 16.0.5.128/27 (Net4-B) | 16.0.6.61 (leaf4) | 255.255.255.224 | eth0 |
+| 16.0.0.0/23 (Net5) | 16.0.6.37 (leaf1 → spine1) | 255.255.254.0 | eth4 |
+| 16.0.6.0/29 (enlaces de leaf1) | 16.0.6.37 (leaf1) | 255.255.255.248 | eth4 |
+| 16.0.6.32/29 (enlaces de leaf1) | 16.0.6.37 (leaf1) | 255.255.255.248 | eth4 |
+| 16.0.6.8/29 (enlaces de leaf2) | 16.0.6.45 (leaf2) | 255.255.255.248 | eth3 |
+| 16.0.6.40/29 (enlaces de leaf2) | 16.0.6.45 (leaf2) | 255.255.255.248 | eth3 |
+| 16.0.6.16/29 (enlaces de leaf3) | 16.0.6.53 (leaf3) | 255.255.255.248 | eth1 |
+| 16.0.6.48/29 (enlaces de leaf3) | 16.0.6.53 (leaf3) | 255.255.255.248 | eth1 |
+| 16.0.6.24/29 (enlaces de leaf4) | 16.0.6.61 (leaf4) | 255.255.255.248 | eth0 |
+| 16.0.6.56/29 (enlaces de leaf4) | 16.0.6.61 (leaf4) | 255.255.255.248 | eth0 |
 
 ### Tabla de ruteo IPv6
 
