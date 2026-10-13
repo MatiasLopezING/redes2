@@ -1,7 +1,7 @@
 # Diseño de direccionamiento
 
-> **Bloque IPv4 asignado:** `___.___.___.___/__`
-> **Bloque IPv6 asignado:** `____:____::/__`
+> **Bloque IPv4 asignado:** `16.0.0.0/16`
+> **Bloque IPv6 asignado:** `1600::/32`
 
 ---
 
