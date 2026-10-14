@@ -5,7 +5,9 @@
 Matías Lopez (02670/0) · Juan David Alvarez (03100/2) · Lautaro Nahuel Lopes (02978/9)
 
 ---
+<img width="1078" height="568" alt="fig6-diag1tpi" src="https://github.com/user-attachments/assets/eb6abe47-e7fd-4b79-854d-59211c8adab2" />
 
+---
 ## Datos
 
 | Bloque IPv4 | Bloque IPv6 |
@@ -55,8 +57,7 @@ de bits de host; se restan 2 por la dirección de red y la de broadcast.
 
 **Subtotal LANs: 1456 direcciones.**
 
-El enunciado indica considerar los enlaces punto a punto `/30` o `/31`, salvo las redes
-donde hay switches o hubs. Se contabilizaron **16 enlaces punto a punto**:
+El enunciado indica considerar los enlaces punto a punto `/30` o `/31`. Se contabilizaron **16 enlaces punto a punto**:
 
 - 8 entre cada router de LAN y su leaf (2 por cada Net1 a Net4)
 - 8 entre cada leaf y los dos spines (4 leafs × 2 spines)
@@ -83,8 +84,8 @@ un múltiplo de su propio tamaño.
 
 - El primer segmento es **Net5**, que requiere 512 direcciones (`/23`). Se le asigna
   `16.0.0.0/23`, que abarca de `16.0.0.0` a `16.0.1.255`.
-- Siguen **Net1-A** y **Net1-B**, de 256 direcciones cada una (`/24`):
-  `16.0.2.0/24` y `16.0.3.0/24`.
+- Siguen **Net1-A** y **Net1-B**, de 256 direcciones cada una (`/24`): que abarcan 
+  de `16.0.2.0/24` a `16.0.2.255/24` y de `16.0.3.0/24` a `16.0.3.255/24`.
 - Siguen **Net2-A** y **Net3-A**, de 128 direcciones (`/25`). Se subnetea `16.0.4.0/24`
   en dos `/25`: `16.0.4.0/25` y `16.0.4.128/25`.
 - Sigue **Net3-B**, de 64 direcciones (`/26`). Se subnetea `16.0.5.0/24`:
@@ -592,9 +593,16 @@ ping 1.2.3.4
 - Respuesta **ICMP Time Exceeded (tipo 11, código 0)** → indicaría que el datagrama
   circuló hasta agotar el TTL, es decir, **hay un bucle de ruteo**.
 
-> *(Figura D.1 — ping de n11 a n33)*
-> *(Figura D.2 — traceroute de n11 a n33)*
-> *(Figura D.3 — ping a dirección inexistente: Net Unreachable)*
+**Figuras:**
+
+<img width="561" height="145" alt="ping-n11n33" src="https://github.com/user-attachments/assets/bbf23ddd-fb4a-483e-ab50-3ecc3978f42e" />
+> *(Figura d.1 — ping de n11 a n33)*
+
+<img width="561" height="138" alt="traceroute-n11n33" src="https://github.com/user-attachments/assets/d5c3f311-dfbf-4f54-b35c-182e37d01319" />
+> *(Figura d.2 — traceroute de n11 a n33)*
+
+<img width="560" height="138" alt="ping-unreachable" src="https://github.com/user-attachments/assets/cdc3237b-82c4-4a12-8615-8b2c77c448a0" />
+> *(Figura d.3 — ping de n11 a red inexistente)*
 
 ---
 
