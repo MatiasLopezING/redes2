@@ -596,13 +596,16 @@ ping 1.2.3.4
 **Figuras:**
 
 <img width="561" height="145" alt="ping-n11n33" src="https://github.com/user-attachments/assets/bbf23ddd-fb4a-483e-ab50-3ecc3978f42e" />
-> *(Figura d.1 — ping de n11 a n33)*
+
+> *Figura d.1 — ping de n11 a n33*
 
 <img width="561" height="138" alt="traceroute-n11n33" src="https://github.com/user-attachments/assets/d5c3f311-dfbf-4f54-b35c-182e37d01319" />
-> *(Figura d.2 — traceroute de n11 a n33)*
+
+> *Figura d.2 — traceroute de n11 a n33*
 
 <img width="560" height="138" alt="ping-unreachable" src="https://github.com/user-attachments/assets/cdc3237b-82c4-4a12-8615-8b2c77c448a0" />
-> *(Figura d.3 — ping de n11 a red inexistente)*
+
+> *Figura d.3 — ping de n11 a red inexistente*
 
 ---
 
