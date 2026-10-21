@@ -17,7 +17,9 @@ tp2/
 ├── informe.md                      el entregable
 ├── direccionamiento.md             qué IP va en cada interfaz
 ├── topologia.imn                   la topología de CORE
-├── configs/configurar.sh           configura cualquier nodo
+├── configs/levantar.sh             configura los 25 nodos de una
+├── configs/configurar.sh           configura un nodo suelto
+├── configs/comandos-manuales.md    los comandos, por si hay que ir a mano
 ├── capturas/                       las figuras
 └── redes-II-ing-practica_2.pdf     el enunciado (pág. 9)
 ```
@@ -44,22 +46,35 @@ Se edita y se hace git desde Windows; CORE corre en la VM. La `.ova` no va al re
 ## Levantar la red
 
 1. En la VM: `core-gui &` → abrir `/media/sf_tpi/tp2/topologia.imn` → **Start** ▶
-2. Doble click en **cada router y cada PC** → en su terminal:
+2. En una terminal **de la VM** (no de un nodo):
 
 ```bash
-bash /media/sf_tpi/tp2/configs/configurar.sh
+sudo bash /media/sf_tpi/tp2/configs/levantar.sh
 ```
 
-El script detecta solo qué nodo es. Hubs y switches no se configuran.
-Orden: spines → leafs → routers de LAN → PCs.
+Un solo comando configura los 25 nodos. Los hubs y switches no se configuran: son capa 1 y 2.
+
+```
+  ✓ n5-spine1
+  ✓ n6-spine2
+  ...
+=== 25 configurados · 0 con problemas ===
+```
+
+> **Las direcciones IP ya vienen en el `.imn`** y CORE las aplica sola al arrancar, igual
+> que los servicios (los routers ya vienen sin `zebra` ni OSPF). El script agrega lo único
+> que el `.imn` no puede guardar: **rutas**, **sysctl** y el **túnel 6in4**.
+> Detalle completo → **[Levantar la red en CORE](https://github.com/MatiasLopezING/redes2/wiki/13-Levantar-la-red-en-CORE)**
+
+**Probar**, desde n11:
 
 ```bash
-# probar, desde n11
 ping -c2 16.0.5.130    # a n33, cruza toda la topología (TTL 59)
 ping -c2 1.2.3.4       # debe dar Net Unreachable, NO Time Exceeded
 ```
 
 > Si algo no anda → **[Errores y diagnóstico](https://github.com/MatiasLopezING/redes2/wiki/11-Errores-y-diagnostico)**
+> Para configurar un nodo a mano → `configs/comandos-manuales.md`
 
 ## Las interfaces no son simétricas
 
