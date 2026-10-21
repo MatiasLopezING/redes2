@@ -15,7 +15,17 @@
 NODO="${1:-$(hostname)}"
 echo "=== Configurando: $NODO ==="
 
-ip4 () { ip addr flush dev "$1" 2>/dev/null; ip addr add "$2" dev "$1"; ip link set "$1" up; echo "    $1 → $2"; }
+ip4 () {
+    # OJO: "ip addr flush" sin -4 borra TAMBIEN la link-local fe80::, y sin ella
+    # el NDP no funciona (IPv6 queda muerto aunque IPv4 ande). Por eso se limpia
+    # IPv4 y solo las IPv6 de scope global (las 2001:: que asigna CORE).
+    ip -4 addr flush dev "$1" 2>/dev/null
+    ip -6 addr flush dev "$1" scope global 2>/dev/null
+    ip addr add "$2" dev "$1"
+    ip link set "$1" up
+    [ -z "$(ip -6 addr show dev "$1" scope link)" ] && ip -6 addr add "fe80::$(tr -dc a-f0-9 </dev/urandom|head -c4):$(tr -dc a-f0-9 </dev/urandom|head -c4)/64" dev "$1" 2>/dev/null
+    echo "    $1 → $2"
+}
 ruta () { ip route add "$1" via "$2" 2>/dev/null || ip route replace "$1" via "$2"; }
 router () {
     # CORE arranca zebra/ospfd por defecto. El enunciado pide ruteo ESTÁTICO,
@@ -228,14 +238,14 @@ n34|n34-*)  # PC de Net5 — también IPv6
     ip4 eth0 16.0.0.10/23
     ruta default 16.0.0.1
     ip -6 addr add 1600:0:0:5::10/64 dev eth0 2>/dev/null
-    ip -6 route add default via 1600:0:0:5::1 2>/dev/null ;;
+    ip -6 route replace default via 1600:0:0:5::1 dev eth0 ;;
 
 n35|n35-*)  # PC de Net6 — también IPv6
     host
     ip4 eth0 16.0.5.170/28
     ruta default 16.0.5.161
     ip -6 addr add 1600:0:0:6::10/64 dev eth0 2>/dev/null
-    ip -6 route add default via 1600:0:0:6::1 2>/dev/null ;;
+    ip -6 route replace default via 1600:0:0:6::1 dev eth0 ;;
 
 *)
     echo "!! Nodo '$NODO' no reconocido."
