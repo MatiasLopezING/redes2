@@ -258,8 +258,13 @@ sysctl -w net.ipv6.conf.all.forwarding=1
 ip6tables -P FORWARD ACCEPT
 ```
 
-> *(Figura A.1 — salida de `ip -6 addr show` en spine1)*
-> *(Figura A.2 — salida de `ip -6 addr show` en spine2)*
+![Figura A.1](capturas/EjercicioA_foto1_spine1.png)
+
+> *Figura A.1 — `ip -6 addr show` en spine1: LAN Net5 (`1600:0:0:5::1`) y extremo del túnel (`1600:0:0:ffff::1`, MTU 1480)*
+
+![Figura A.2](capturas/EjercicioA_foto2_spine2.png)
+
+> *Figura A.2 — `ip -6 addr show` en spine2: LAN Net6 (`1600:0:0:6::1`) y extremo del túnel (`1600:0:0:ffff::2`)*
 
 ---
 
@@ -520,8 +525,73 @@ ip -6 route add default via 1600:0:0:5::1
 ip -6 route add default via 1600:0:0:6::1
 ```
 
-> *(Figura B.1 … B.14 — salida de `ip route show` en cada router)*
-> *(Figura B.15 — salida de `ip -6 route show` en spine1 y spine2)*
+![Figura B.1](capturas/EjercicioB_foto01_n1.png)
+
+> *Figura B.1 — `ip route show` en **n1***
+
+![Figura B.2](capturas/EjercicioB_foto02_n2.png)
+
+> *Figura B.2 — `ip route show` en **n2***
+
+![Figura B.3](capturas/EjercicioB_foto03_n17.png)
+
+> *Figura B.3 — `ip route show` en **n17***
+
+![Figura B.4](capturas/EjercicioB_foto04_n18.png)
+
+> *Figura B.4 — `ip route show` en **n18***
+
+![Figura B.5](capturas/EjercicioB_foto05_n21.png)
+
+> *Figura B.5 — `ip route show` en **n21***
+
+![Figura B.6](capturas/EjercicioB_foto06_n22.png)
+
+> *Figura B.6 — `ip route show` en **n22***
+
+![Figura B.7](capturas/EjercicioB_foto07_n23.png)
+
+> *Figura B.7 — `ip route show` en **n23***
+
+![Figura B.8](capturas/EjercicioB_foto08_n24.png)
+
+> *Figura B.8 — `ip route show` en **n24***
+
+![Figura B.9](capturas/EjercicioB_foto09_leaf1.png)
+
+> *Figura B.9 — `ip route show` en **leaf1***
+
+![Figura B.10](capturas/EjercicioB_foto10_leaf2.png)
+
+> *Figura B.10 — `ip route show` en **leaf2***
+
+![Figura B.11](capturas/EjercicioB_foto11_leaf3.png)
+
+> *Figura B.11 — `ip route show` en **leaf3***
+
+![Figura B.12](capturas/EjercicioB_foto12_leaf4.png)
+
+> *Figura B.12 — `ip route show` en **leaf4***
+
+![Figura B.13](capturas/EjercicioB_foto13_spine1.png)
+
+> *Figura B.13 — `ip route show` en **spine1***
+
+![Figura B.14](capturas/EjercicioB_foto14_spine2.png)
+
+> *Figura B.14 — `ip route show` en **spine2***
+
+![Figura B.15](capturas/EjercicioB_foto15_spine1_ipv6.png)
+
+> *Figura B.15 — `ip -6 route show` en spine1*
+
+![Figura B.16](capturas/EjercicioB_foto16_spine2_ipv6.png)
+
+> *Figura B.16 — `ip -6 route show` en spine2*
+
+![Figura B.17](capturas/EjercicioB_foto00_script_n1.png)
+
+> *Figura B.17 — ejecución de `configurar.sh` en n1: el script imprime direcciones y tabla de ruteo al finalizar*
 
 ---
 
@@ -561,8 +631,8 @@ iptables -t nat -L -n -v
 conntrack -L
 ```
 
-> *(Figura C.1 — regla de NAT en n24)*
-> *(Figura C.2 — ping desde n33 y tabla de conntrack mostrando la traducción)*
+> **No realizado.** Inciso alternativo: se desarrolla el planteo, sin la verificación
+> en el simulador.
 
 > **Orden de ejecución:** este inciso se realizó **después** del inciso E, ya que al
 > quedar n33 detrás de NAT el intercambio capturado en E cambiaría.
@@ -595,17 +665,17 @@ ping 1.2.3.4
 
 **Figuras:**
 
-<img width="561" height="145" alt="ping-n11n33" src="https://github.com/user-attachments/assets/bbf23ddd-fb4a-483e-ab50-3ecc3978f42e" />
+![Figura D.1](capturas/EjercicioD_foto1_ping_n11_a_n33.png)
 
-> *Figura d.1 — ping de n11 a n33*
+> *Figura D.1 — ping de n11 a n33: 0% de pérdida y **TTL 59** (64 − 5 routers)*
 
-<img width="561" height="138" alt="traceroute-n11n33" src="https://github.com/user-attachments/assets/d5c3f311-dfbf-4f54-b35c-182e37d01319" />
+![Figura D.2](capturas/EjercicioD_foto2_traceroute_n11_a_n33.png)
 
-> *Figura d.2 — traceroute de n11 a n33*
+> *Figura D.2 — traceroute de n11 a n33: n1 → leaf1 → **spine1** → leaf4 → n24 → n33*
 
-<img width="560" height="138" alt="ping-unreachable" src="https://github.com/user-attachments/assets/cdc3237b-82c4-4a12-8615-8b2c77c448a0" />
+![Figura D.3](capturas/EjercicioD_foto3_ping_destino_inexistente.png)
 
-> *Figura d.3 — ping de n11 a red inexistente*
+> *Figura D.3 — ping a `1.2.3.4`: **Net Unreachable** desde `16.0.6.34` (spine1) y no Time Exceeded. Confirma que no hay bucles y que el descarte ocurre en el spine, que por diseño no tiene ruta por defecto*
 
 ---
 
@@ -657,10 +727,21 @@ Como el segmento de n11 cuelga de un **hub**, la captura puede tomarse desde cua
 PC del mismo segmento: al ser un único dominio de colisión, todas las estaciones reciben
 todas las tramas.
 
-> *(Figura E.1 — ping de n11 a n33)*
-> *(Figura E.2 — ARP Request en Wireshark, con los campos resaltados)*
-> *(Figura E.3 — ARP Reply)*
-> *(Figura E.4 — ICMP Echo Request y Echo Reply)*
+![Figura E.1](capturas/EjercicioE_foto1_ping_n11_a_n33.png)
+
+> *Figura E.1 — ping de n11 a n33 (TTL 59 = 64 − 5 routers)*
+
+![Figura E.2](capturas/EjercicioE_foto2_arp_request.png)
+
+> *Figura E.2 — **ARP Request**: destino Ethernet `ff:ff:ff:ff:ff:ff` (broadcast) y `Target MAC` en cero. Es el paquete N° 1 de la captura: el ping no puede comenzar sin resolver antes la MAC*
+
+![Figura E.3](capturas/EjercicioE_foto3_arp_reply.png)
+
+> *Figura E.3 — **ARP Reply**: unicast de n1 hacia n11, 29 µs después*
+
+![Figura E.4](capturas/EjercicioE_foto4_icmp.png)
+
+> *Figura E.4 — **ICMP Echo Request**: IP destino `16.0.5.130` (n33) pero MAC destino `00:00:00:aa:00:02` (n1, el gateway). Capa 2 local, capa 3 extremo a extremo*
 
 ---
 
@@ -683,9 +764,21 @@ traceroute 16.0.5.130
 tcpdump -i eth0 -w /media/sf_tpi/tp2/capturas/f-traceroute.pcap 'icmp or udp'
 ```
 
-> *(Figura F.1 — salida de traceroute de n11 a n33)*
-> *(Figura F.2 — captura: sondas con TTL creciente y los Time Exceeded)*
-> *(Figura F.3 — mensaje final del destino)*
+![Figura F.1](capturas/EjercicioF_foto1_traceroute_n11.png)
+
+> *Figura F.1 — salida de `traceroute` de n11 a n33: los 6 saltos del camino*
+
+![Figura F.2](capturas/EjercicioF_foto2_sonda_udp_ttl1.png)
+
+> *Figura F.2 — primera sonda: **UDP** al puerto **33434** con **TTL = 1***
+
+![Figura F.3](capturas/EjercicioF_foto3_icmp_time_exceeded.png)
+
+> *Figura F.3 — **ICMP Time Exceeded (11/0)** desde `16.0.2.1`: el router se delata al descartar la sonda. El mensaje de error sale con TTL 64 propio, por ser un datagrama nuevo*
+
+![Figura F.4](capturas/EjercicioF_foto4_icmp_port_unreachable.png)
+
+> *Figura F.4 — **ICMP Port Unreachable (3/3)** desde `16.0.5.130`: el cambio de tipo 11 a tipo 3 marca el fin del recorrido*
 
 ---
 
@@ -711,23 +804,53 @@ IPv6, la comunicación se interrumpe: 1280 es el MTU mínimo obligatorio de IPv6
 Too Big (tipo 2)** y es el nodo origen quien debe fragmentar mediante el *extension
 header* Fragment, previo descubrimiento del Path MTU.
 
-> *(Figura G.1 — tamaño del datagrama antes de fragmentar)*
-> *(Figura G.2 — configuración del MTU)*
-> *(Figura G.3 — fragmentos en Wireshark con Identification, MF y Offset)*
+> **No realizado.** Inciso alternativo: se desarrolla el planteo, sin la verificación
+> en el simulador.
 
 ---
 
 ## Inciso H — Conectividad IPv6 y análisis de ICMPv6
 
-Se verifica la conectividad entre Net5 y Net6 con `ping6`, y se captura el tráfico para
-analizar ICMPv6.
+### Verificación del túnel
+
+La conectividad IPv6 entre Net5 y Net6 se verificó sobre el túnel 6in4, desde spine1:
 
 ```bash
-# desde n34
-ping6 -c 4 1600:0:0:6::10
-traceroute6 1600:0:0:6::10
-tcpdump -i eth0 -w /media/sf_tpi/tp2/capturas/h-icmpv6.pcap icmp6
+ping6 -c 4 1600:0:0:ffff::2   # extremo remoto del túnel (spine2)
+ping6 -c 4 1600:0:0:6::1      # LAN Net6, al otro lado del túnel
 ```
+
+Ambas pruebas dieron **0% de pérdida**. El dato relevante es el **Hop Limit = 64 sin
+decrementar**: entre los dos spines hay un router IPv4 real (leaf1), pero para IPv6 el
+túnel constituye **un único salto**, porque leaf1 reenvía un datagrama IPv4 ordinario sin
+interpretar su contenido.
+
+![Figura H.1](capturas/EjercicioH_foto1_ping_tunel.png)
+
+> *Figura H.1 — `ping6` de spine1 al extremo remoto del túnel (`1600:0:0:ffff::2`)*
+
+![Figura H.2](capturas/EjercicioH_foto2_ping_net6.png)
+
+> *Figura H.2 — `ping6` de spine1 a la LAN Net6 (`1600:0:0:6::1`), atravesando el túnel*
+
+### La encapsulación
+
+Capturando en el enlace spine1 ↔ leaf1 con el filtro `ip.proto == 41` se observa la doble
+cabecera de red: un datagrama **IPv4** entre los extremos del túnel que transporta un
+datagrama **IPv6** completo.
+
+![Figura H.3](capturas/EjercicioH_foto3_encapsulacion_proto41.png)
+
+> *Figura H.3 — el filtro es de IPv4 pero Wireshark muestra protocolo **ICMPv6** y direcciones IPv6: las dos capas de red apiladas*
+
+![Figura H.4](capturas/EjercicioH_foto4_cabeceras_ipv4_ipv6.png)
+
+> *Figura H.4 — las tres cabeceras expandidas. IPv4 `Protocol: IPv6 (41)` de `16.0.6.34` a `16.0.6.38`; IPv6 `Next Header: ICMPv6 (58)` de `1600:0:0:ffff::1` a `1600:0:0:6::1`; ICMPv6 `Type: 128`*
+
+El campo **`Protocol = 41`** de la cabecera IPv4 es el que identifica el encapsulamiento
+6in4 (RFC 4213). Los tamaños lo confirman: `Total Length` IPv4 = 124 bytes = 20 (IPv4) +
+40 (IPv6) + 64 (ICMPv6 y datos). Esos **20 bytes de sobrecarga** son los que reducen la
+MTU del túnel a **1480** (visible en la figura A.1).
 
 ### Diferencias respecto de IPv4
 
@@ -735,38 +858,76 @@ tcpdump -i eth0 -w /media/sf_tpi/tp2/capturas/h-icmpv6.pcap icmp6
 |---|---|---|
 | Resolución dirección ↔ MAC | **ARP**, protocolo independiente | **NDP**, dentro de ICMPv6 |
 | Mensajes | Request / Reply | **Neighbor Solicitation (135)** / **Neighbor Advertisement (136)** |
-| Destino de la consulta | broadcast `FF:FF:FF:FF:FF:FF` | **multicast solicited-node** `ff02::1:ffXX:XXXX` |
+| Destino de la consulta | broadcast `ff:ff:ff:ff:ff:ff` | **multicast solicited-node** `ff02::1:ffXX:XXXX` |
 | MAC destino | broadcast | `33:33:ff:` + últimos 3 bytes de la IPv6 |
 | Echo Request / Reply | 8 / 0 | **128 / 129** |
 
-El **Neighbor Solicitation** lleva **Hop Limit = 255**, requisito de seguridad de NDP: un
-nodo que recibe un NDP con Hop Limit distinto de 255 lo descarta, ya que garantiza que el
-mensaje no atravesó ningún router.
+El **Neighbor Solicitation** lleva **Hop Limit = 255**: un nodo descarta todo NDP cuyo Hop
+Limit sea distinto de 255, lo que garantiza que el mensaje no atravesó ningún router.
 
-A diferencia del ARP Request, que interrumpe a todas las estaciones del segmento, el NS
-se envía a la dirección multicast *solicited-node*, formada con los últimos 24 bits de la
-dirección buscada. Solo procesan la trama los nodos cuyo sufijo coincide.
+A diferencia del ARP Request, que interrumpe a todas las estaciones del segmento, el NS se
+envía a la dirección multicast *solicited-node*, formada con los últimos 24 bits de la
+dirección buscada: solo procesan la trama los nodos cuyo sufijo coincide.
 
-Para que el tráfico IPv6 atravesara los nodos fue necesario, en cada spine:
+### Dos limitaciones del simulador
 
-```bash
-sysctl -w net.ipv6.conf.all.forwarding=1
-ip6tables -P FORWARD ACCEPT
+Durante la puesta en marcha aparecieron dos problemas que no corresponden al diseño sino
+al entorno, y que conviene dejar documentados.
+
+**1. Pérdida de la dirección link-local.** El comando `ip addr flush dev <if>`, sin el
+modificador `-4`, elimina también la dirección **link-local `fe80::`** que el kernel genera
+al levantar la interfaz, y no la regenera mientras la interfaz siga activa. Sin link-local
+el NDP no opera, de modo que IPv4 funcionaba con normalidad e IPv6 quedaba inutilizable
+sobre el mismo enlace. Se corrigió el script para limpiar únicamente IPv4 y las IPv6 de
+*scope global*, preservando la link-local.
+
+**2. Filtrado del multicast NDP en los switches.** Los switches del simulador son *bridges*
+de Linux, que pueden descartar el tráfico multicast IPv6. Con `tcpdump` se comprobó que el
+Neighbor Solicitation **salía** de n34 hacia `ff02::1:ff00:1` pero **no llegaba** a la
+interfaz de spine1:
+
+```
+n34    → IP6 1600:0:0:5::10 > ff02::1:ff00:1: neighbor solicitation, who has 1600:0:0:5::1
+spine1 → 0 packets captured
 ```
 
-El segundo comando corresponde al script `ipv6-unfilter.sh` provisto por la cátedra: en
-los nodos del simulador la política por defecto de la cadena FORWARD de `ip6tables` es
-`DROP`, por lo que los datagramas IPv6 se descartan silenciosamente aunque el
-direccionamiento y el ruteo sean correctos.
+Esto explica con precisión por qué ARP funcionaba e NDP no: **ARP usa broadcast
+(`ff:ff:ff:ff:ff:ff`), que el bridge siempre inunda, mientras que NDP usa multicast
+(`33:33:ff:..`), que queda sujeto a filtrado.** La resolución de vecinos se cargó
+entonces de forma estática:
 
-> *(Figura H.1 — ping6 de n34 a n35)*
-> *(Figura H.2 — traceroute6)*
-> *(Figura H.3 — Neighbor Solicitation y Neighbor Advertisement en Wireshark)*
-> *(Figura H.4 — Echo Request / Echo Reply ICMPv6)*
-> *(Figura H.5 — datagramas encapsulados en el túnel, vistos desde leaf1)*
+```bash
+ip -6 neigh replace 1600:0:0:5::1  lladdr 00:00:00:aa:00:0a dev eth0   # en n34
+ip -6 neigh replace 1600:0:0:5::10 lladdr 00:00:00:aa:00:0b dev eth1   # en spine1
+```
+
+Por esa limitación la verificación se realizó **entre los extremos del túnel**, que es
+donde reside el mecanismo de transición objeto del inciso y donde no interviene ningún
+bridge. El direccionamiento y el ruteo IPv6 de las LAN son los indicados en las figuras
+A.1, A.2, B.15 y B.16.
 
 ---
 
 ## Conclusiones
 
-*(a completar)*
+La topología spine-leaf quedó operativa con **ruteo exclusivamente estático** y
+conectividad verificada extremo a extremo. Del trabajo se desprenden cuatro observaciones.
+
+**El VLSM asignado de mayor a menor evita la fragmentación del espacio.** Las diez redes
+consumen 1520 de las 65 536 direcciones del bloque (2,3%), cada bloque alineado a su
+propio tamaño y sin solapamientos, dejando el resto disponible para crecer.
+
+**La disciplina de ruteo es lo que vuelve imposible el bucle.** Rutas por defecto
+únicamente hacia arriba, rutas específicas hacia abajo y **spines sin ruta por defecto**.
+La figura D.3 lo demuestra: el ping a una red inexistente devuelve *Net Unreachable* desde
+el propio spine, y no *Time Exceeded*, que sería el síntoma de un lazo.
+
+**Las redes de tránsito también deben ser alcanzables.** El primer diagnóstico de falla
+—ping fallido entre n1 y n24, pero exitoso forzando la IP de origen de la LAN— se debía a
+que los spines conocían las LAN pero no las `/30` de los enlaces punto a punto, por lo que
+descartaban el tráfico de retorno. Como los dos enlaces de cada leaf quedaron contiguos y
+alineados, se resolvió con **ocho rutas `/29` sumarizadas** en lugar de dieciséis `/30`.
+
+**El túnel 6in4 confina la complejidad IPv6 a dos nodos.** Los cuatro leafs operan
+únicamente IPv4 y no requieren configuración alguna de IPv6. El costo es de 20 bytes por
+datagrama y una MTU de 1480.
