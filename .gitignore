@@ -14,3 +14,6 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# La wiki es su propio repo de GitHub (redes2.wiki.git)
+wiki/
