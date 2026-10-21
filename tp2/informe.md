@@ -595,50 +595,6 @@ ip -6 route add default via 1600:0:0:6::1
 
 ---
 
-## Inciso C — NAT con direccionamiento privado *(alternativo)*
-
-Se asigna a **n33** una dirección privada según **RFC 1918**, que define tres rangos:
-
-```
-10.0.0.0    – 10.255.255.255     (1 red clase A)
-172.16.0.0  – 172.31.255.255     (16 redes clase B)
-192.168.0.0 – 192.168.255.255    (256 redes clase C)
-```
-
-Se elige `192.168.0.0/24` para el segmento, con `192.168.0.10` para n33 y
-`192.168.0.1` para la interfaz de n24 que actúa como gateway. Como las direcciones
-privadas no son ruteables fuera de la organización, n24 debe traducirlas.
-
-```bash
-# n24
-ip addr add 192.168.0.1/24 dev eth0
-sysctl -w net.ipv4.ip_forward=1
-iptables -P FORWARD ACCEPT
-iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth1 -j MASQUERADE
-
-# n33
-ip addr add 192.168.0.10/24 dev eth0
-ip route add default via 192.168.0.1
-```
-
-Se usa **MASQUERADE** (NAPT) en lugar de SNAT estático porque traduce contra la
-dirección que tenga la interfaz de salida sin necesidad de fijarla en la regla.
-
-Verificación:
-
-```bash
-iptables -t nat -L -n -v
-conntrack -L
-```
-
-> **No realizado.** Inciso alternativo: se desarrolla el planteo, sin la verificación
-> en el simulador.
-
-> **Orden de ejecución:** este inciso se realizó **después** del inciso E, ya que al
-> quedar n33 detrás de NAT el intercambio capturado en E cambiaría.
-
----
-
 ## Inciso D — Test con ping y traceroute
 
 Con el direccionamiento y las rutas configuradas, se verificó la conectividad entre
@@ -782,33 +738,6 @@ tcpdump -i eth0 -w /media/sf_tpi/tp2/capturas/f-traceroute.pcap 'icmp or udp'
 
 ---
 
-## Inciso G — Modificación de MTU y fragmentación *(alternativo)*
-
-Se verifica primero el tamaño de un Echo Request estándar (84 bytes: 20 de cabecera IP +
-8 de cabecera ICMP + 56 de datos). Luego se reduce el MTU de un enlace intermedio para
-forzar la fragmentación.
-
-```bash
-ip link set dev eth1 mtu 500
-ping -s 1400 16.0.5.130
-tcpdump -i eth1 -w /media/sf_tpi/tp2/capturas/g-fragmentacion.pcap icmp
-```
-
-En la captura se observan los campos **Identification** (igual en todos los fragmentos
-del mismo datagrama), **More Fragments** (en 1 salvo en el último) y **Fragment Offset**
-(expresado en unidades de 8 bytes).
-
-**Contraste con IPv6.** Si se reduce el MTU por debajo de **1280 bytes** en el camino
-IPv6, la comunicación se interrumpe: 1280 es el MTU mínimo obligatorio de IPv6. Además,
-**los routers intermedios no fragmentan en IPv6**; el router devuelve un **ICMPv6 Packet
-Too Big (tipo 2)** y es el nodo origen quien debe fragmentar mediante el *extension
-header* Fragment, previo descubrimiento del Path MTU.
-
-> **No realizado.** Inciso alternativo: se desarrolla el planteo, sin la verificación
-> en el simulador.
-
----
-
 ## Inciso H — Conectividad IPv6 y análisis de ICMPv6
 
 ### Verificación del túnel
@@ -905,6 +834,156 @@ Por esa limitación la verificación se realizó **entre los extremos del túnel
 donde reside el mecanismo de transición objeto del inciso y donde no interviene ningún
 bridge. El direccionamiento y el ruteo IPv6 de las LAN son los indicados en las figuras
 A.1, A.2, B.15 y B.16.
+
+---
+
+## Inciso C — NAT con direccionamiento privado *(alternativo)*
+
+Se asigna a **n33** una dirección privada según **RFC 1918**, que define tres rangos:
+
+```
+10.0.0.0    – 10.255.255.255     (1 red clase A)
+172.16.0.0  – 172.31.255.255     (16 redes clase B)
+192.168.0.0 – 192.168.255.255    (256 redes clase C)
+```
+
+Se elige `192.168.0.0/24`, con `192.168.0.10` para n33 y `192.168.0.1` para la interfaz de
+n24 que oficia de gateway. En n24 la dirección privada se **agrega** a la que ya tenía, de
+modo que n32 conserva su conectividad por `16.0.5.0/27`; en n33, en cambio, se **reemplaza**:
+queda únicamente con la privada.
+
+```bash
+# n24
+ip addr add 192.168.0.1/24 dev eth0
+sysctl -w net.ipv4.ip_forward=1
+iptables -P FORWARD ACCEPT
+iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth1 -j MASQUERADE
+
+# n33
+ip addr del 16.0.5.130/27 dev eth0
+ip addr add 192.168.0.10/24 dev eth0
+ip route replace default via 192.168.0.1
+```
+
+Se usa **MASQUERADE** (NAPT) y no SNAT estático porque traduce contra la dirección que
+tenga la interfaz de salida sin necesidad de fijarla en la regla.
+
+![Figura C.1](capturas/EjercicioC_foto1_direccion_privada.png)
+
+> *Figura C.1 — n24 con ambas direcciones y n33 únicamente con `192.168.0.10/24` y su ruta por defecto*
+
+![Figura C.2](capturas/EjercicioC_foto2_regla_nat.png)
+
+> *Figura C.2 — la regla MASQUERADE con sus contadores: 13 flujos traducidos*
+
+> El contador registra **conexiones, no paquetes**: la tabla `nat` se consulta solo para el
+> primer paquete de cada flujo y los siguientes se traducen a partir de la entrada ya creada
+> en `conntrack`. Por eso un `ping -c 60`, que es un único flujo ICMP, lo incrementa en 1.
+
+![Figura C.3](capturas/EjercicioC_foto3_ping_desde_n33.png)
+
+> *Figura C.3 — n33, con dirección privada, alcanza n11 al otro extremo de la topología*
+
+### La traducción, capturada a ambos lados de n24
+
+![Figura C.4](capturas/EjercicioC_foto4_lado_privado.png)
+
+> *Figura C.4 — **lado privado** (n24 ↔ n28): origen `192.168.0.10`*
+
+![Figura C.5](capturas/EjercicioC_foto5_lado_publico.png)
+
+> *Figura C.5 — **lado público** (n24 ↔ leaf4): origen `16.0.6.29`, con el mismo `id` y `seq`*
+
+| | Lado privado | Lado público |
+|---|---|---|
+| Source | `192.168.0.10` | **`16.0.6.29`** |
+| Destination | `16.0.2.10` | `16.0.2.10` |
+| ICMP `id` | `0x004a` | **`0x004a`** |
+| `seq` | 1/256 | **1/256** |
+| TTL | 64 | **63** |
+
+El **`id` y el `seq` idénticos** prueban que se trata del mismo paquete con la dirección de
+origen reescrita; el **TTL decrementado** confirma que n24 lo ruteó. Como el tráfico sale
+con origen `16.0.6.29` —una dirección de enlace punto a punto—, el retorno depende de las
+rutas de tránsito `/29` sumarizadas que se agregaron a los spines en el inciso b): **sin
+ellas el NAT no funcionaría**.
+
+---
+
+## Inciso G — Modificación de MTU y fragmentación *(alternativo)*
+
+### IPv4: fragmenta el router
+
+Se reduce a **600 bytes** el MTU del enlace entre n24 y n33, en ambos extremos, y se envía
+desde n11 un datagrama que no entra en él.
+
+```bash
+ip link set eth0 mtu 600          # en n24 y en n33
+ping -c2 -s 1400 -M dont 16.0.5.130    # desde n11
+```
+
+`-M dont` desactiva el bit *Don't Fragment*: sin él el router descartaría el datagrama en
+lugar de partirlo. El tamaño total es `1400 + 8 (ICMP) + 20 (IP) = 1428 bytes`.
+
+![Figura G.1](capturas/EjercicioG_foto1_mtu_600.png)
+
+> *Figura G.1 — MTU reducido a 600 en los dos extremos del segmento de n33*
+
+![Figura G.2](capturas/EjercicioG_foto2_ping_1400.png)
+
+> *Figura G.2 — el ping responde con 0% de pérdida: n24 fragmentó y n33 reensambló*
+
+![Figura G.3](capturas/EjercicioG_foto3_fragmentos.png)
+
+> *Figura G.3 — los **tres fragmentos** por datagrama, con el filtro `ip.flags.mf == 1 || ip.frag_offset > 0`*
+
+Los tamaños se desprenden del MTU: `600 − 20 = 580`, redondeado al múltiplo de 8 inferior
+da **576 bytes** de datos por fragmento, y `1408 − 576 − 576 = 256` en el último. De ahí
+los datagramas de **596 / 596 / 276 bytes**.
+
+![Figura G.4](capturas/EjercicioG_foto4_campos_fragmentacion.png)
+
+> *Figura G.4 — el fragmento intermedio: `Identification` compartido, `More fragments` activo y `Fragment offset` distinto de cero*
+
+Los tres campos que permiten el reensamblado:
+
+| Campo | Valor | Función |
+|---|---|---|
+| `Identification` | `0x8c66`, **igual en los tres** | agrupa los fragmentos de un mismo datagrama |
+| `More fragments` | 1, 1, **0** | marca cuál es el último |
+| `Fragment offset` | 0, **72**, 144 | ubica cada trozo dentro del original |
+
+> El campo *Fragment Offset* se expresa en **unidades de 8 bytes**: el valor almacenado es
+> 72, aunque Wireshark lo presente ya multiplicado, como 576 bytes.
+
+### IPv6: fragmenta el origen
+
+En IPv6 **los routers intermedios no fragmentan**: si el datagrama no entra en el enlace
+siguiente, el router lo descarta y devuelve **ICMPv6 Packet Too Big (tipo 2)**, y es el
+nodo origen quien debe reducir el tamaño. La fragmentación, cuando ocurre, se señaliza con
+una **cabecera de extensión Fragment (Next Header 44)** en lugar de campos de la cabecera
+fija.
+
+No hizo falta modificar ningún MTU: **el túnel 6in4 ya tiene MTU 1480**, por los 20 bytes
+de la cabecera IPv4 externa.
+
+```bash
+ping6 -c2 -s 1500 -M dont 1600:0:0:6::1    # desde spine1
+```
+
+![Figura G.5](capturas/EjercicioG_foto5_ipv6_fragment_header.png)
+
+> *Figura G.5 — fragmentación IPv6 dentro del túnel: `Next Header: Fragment Header for IPv6 (44)`, offset 179 (1432 bytes) y el reensamblado de 2 fragmentos (1432 + 76 = 1508)*
+
+Acá quien fragmenta es **spine1, el origen**, no un router del camino. Esa es la diferencia
+de fondo con el caso IPv4, donde el que partió el datagrama fue n24, un router intermedio.
+
+| | IPv4 | IPv6 |
+|---|---|---|
+| ¿Quién fragmenta? | origen **y routers intermedios** | **solo el origen** |
+| ¿Dónde van los campos? | en la cabecera fija | en una **cabecera de extensión (44)** |
+| Si no entra en un router | el router lo parte | **ICMPv6 Packet Too Big (tipo 2)** |
+| MTU mínima | 68 bytes | **1280 bytes** |
 
 ---
 
