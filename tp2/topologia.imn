@@ -16,7 +16,7 @@ node n1 {
     canvas c1
     iconcoords {159.0 300.0}
     labelcoords {159.0 332.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth1 n3}
     interface-peer {eth0 n7}
 }
@@ -39,7 +39,7 @@ node n2 {
     canvas c1
     iconcoords {250.0 301.0}
     labelcoords {250.0 333.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth1 n4}
     interface-peer {eth0 n7}
 }
@@ -75,7 +75,7 @@ node n5 {
     canvas c1
     iconcoords {320.0 50.0}
     labelcoords {320.0 82.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth1 n15}
     interface-peer {eth0 n7}
     interface-peer {eth2 n8}
@@ -114,7 +114,7 @@ node n6 {
     canvas c1
     iconcoords {725.0 47.0}
     labelcoords {725.0 79.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth2 n16}
     interface-peer {eth0 n10}
     interface-peer {eth1 n9}
@@ -148,7 +148,7 @@ node n7 {
     canvas c1
     iconcoords {207.0 233.0}
     labelcoords {207.0 265.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n1}
     interface-peer {eth1 n2}
     interface-peer {eth2 n5}
@@ -181,7 +181,7 @@ node n8 {
     canvas c1
     iconcoords {450.0 227.0}
     labelcoords {450.0 259.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n17}
     interface-peer {eth1 n18}
     interface-peer {eth2 n6}
@@ -214,7 +214,7 @@ node n9 {
     canvas c1
     iconcoords {671.0 244.0}
     labelcoords {671.0 276.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n21}
     interface-peer {eth1 n22}
     interface-peer {eth2 n6}
@@ -247,7 +247,7 @@ node n10 {
     canvas c1
     iconcoords {888.0 236.0}
     labelcoords {888.0 268.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n23}
     interface-peer {eth1 n24}
     interface-peer {eth2 n6}
@@ -344,7 +344,7 @@ node n17 {
     canvas c1
     iconcoords {396.0 322.0}
     labelcoords {396.0 354.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n19}
     interface-peer {eth1 n8}
 }
@@ -367,7 +367,7 @@ node n18 {
     canvas c1
     iconcoords {496.0 318.0}
     labelcoords {496.0 350.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n20}
     interface-peer {eth1 n8}
 }
@@ -390,7 +390,7 @@ node n21 {
     canvas c1
     iconcoords {631.0 325.0}
     labelcoords {631.0 357.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n25}
     interface-peer {eth1 n9}
 }
@@ -413,7 +413,7 @@ node n22 {
     canvas c1
     iconcoords {715.0 327.0}
     labelcoords {715.0 359.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n26}
     interface-peer {eth1 n9}
 }
@@ -436,7 +436,7 @@ node n23 {
     canvas c1
     iconcoords {826.0 313.0}
     labelcoords {826.0 345.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n27}
     interface-peer {eth1 n10}
 }
@@ -459,7 +459,7 @@ node n24 {
     canvas c1
     iconcoords {939.0 308.0}
     labelcoords {939.0 340.0}
-    services {IPForward UserDefined}
+    services {IPForward}
     interface-peer {eth0 n28}
     interface-peer {eth1 n10}
 }

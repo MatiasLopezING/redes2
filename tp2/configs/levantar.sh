@@ -2,16 +2,17 @@
 # Configura TODOS los nodos de una sola vez.
 # Se corre en una terminal de la VM (NO dentro de un nodo), con CORE ya arrancado:
 #
-#   sudo bash /media/sf_tpi/tp2/configs/levantar.sh
+#   sudo bash <ruta>/levantar.sh
 #
 # Si algo falla, lo muestra en pantalla en vez de esconderlo.
 
-SCRIPT=/media/sf_tpi/tp2/configs/configurar.sh
+AQUI=$(cd "$(dirname "$0")" && pwd)
+SCRIPT="$AQUI/configurar.sh"      # configurar.sh tiene que estar al lado de este archivo
 VCMD=$(command -v vcmd || echo /usr/local/bin/vcmd)
 S=$(ls -dt /tmp/pycore.* 2>/dev/null | head -1)
 
 [ -z "$S" ]       && { echo "✗ CORE no está corriendo. Apretá Start (▶)."; exit 1; }
-[ -f "$SCRIPT" ]  || { echo "✗ No existe $SCRIPT — ¿está montada la carpeta compartida?"; exit 1; }
+[ -f "$SCRIPT" ]  || { echo "✗ Falta configurar.sh, tiene que estar junto a levantar.sh"; exit 1; }
 [ -x "$VCMD" ]    || { echo "✗ No encuentro vcmd."; exit 1; }
 
 echo "Sesión : $S"

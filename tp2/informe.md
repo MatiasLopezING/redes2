@@ -5,7 +5,9 @@
 Matías Lopez (02670/0) · Juan David Alvarez (03100/2) · Lautaro Nahuel Lopes (02978/9)
 
 ---
-<img width="1078" height="568" alt="fig6-diag1tpi" src="https://github.com/user-attachments/assets/eb6abe47-e7fd-4b79-854d-59211c8adab2" />
+![Figura 6](capturas/figura6-topologia.png)
+
+> *Figura 6 — topología asignada (enunciado, pág. 9)*
 
 ---
 ## Datos
@@ -641,7 +643,7 @@ Se realiza un ping desde **n11** (`16.0.2.10`, Net1-A) hacia **n33** (`16.0.5.13
 Net4-B) y se captura el tráfico en el segmento de n11.
 
 ```bash
-tcpdump -i eth0 -w /media/sf_tpi/tp2/capturas/e-n11-n33.pcap 'arp or icmp'
+tcpdump -i eth0 -w e-n11-n33.pcap 'arp or icmp'
 ```
 
 Como n11 y n33 **no pertenecen a la misma red**, el Echo Request debe enviarse al
@@ -717,7 +719,7 @@ todas las tramas.
 
 ```bash
 traceroute 16.0.5.130
-tcpdump -i eth0 -w /media/sf_tpi/tp2/capturas/f-traceroute.pcap 'icmp or udp'
+tcpdump -i eth0 -w f-traceroute.pcap 'icmp or udp'
 ```
 
 ![Figura F.1](capturas/EjercicioF_foto1_traceroute_n11.png)

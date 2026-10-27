@@ -1,0 +1,904 @@
+node n1 {
+    type router
+    model router
+    network-config {
+	hostname n1
+	!
+	interface eth0
+	 ip address 16.0.6.1/30
+	 mac address 00:00:00:aa:00:00
+	!
+	interface eth1
+	 ip address 16.0.2.1/24
+	 mac address 00:00:00:aa:00:02
+	!
+    }
+    canvas c1
+    iconcoords {159.0 300.0}
+    labelcoords {159.0 332.0}
+    services {IPForward}
+    interface-peer {eth1 n3}
+    interface-peer {eth0 n7}
+}
+
+node n2 {
+    type router
+    model router
+    network-config {
+	hostname n2
+	!
+	interface eth0
+	 ip address 16.0.6.5/30
+	 mac address 00:00:00:aa:00:05
+	!
+	interface eth1
+	 ip address 16.0.3.1/24
+	 mac address 00:00:00:aa:00:06
+	!
+    }
+    canvas c1
+    iconcoords {250.0 301.0}
+    labelcoords {250.0 333.0}
+    services {IPForward}
+    interface-peer {eth1 n4}
+    interface-peer {eth0 n7}
+}
+
+node n5 {
+    type router
+    model router
+    network-config {
+	hostname n5-spine1
+	!
+	interface eth4
+	 ip address 16.0.6.58/30
+	 mac address 00:00:00:aa:00:33
+	!
+	interface eth3
+	 ip address 16.0.6.50/30
+	 mac address 00:00:00:aa:00:31
+	!
+	interface eth2
+	 ip address 16.0.6.42/30
+	 mac address 00:00:00:aa:00:2e
+	!
+	interface eth0
+	 ip address 16.0.6.34/30
+	 mac address 00:00:00:aa:00:09
+	!
+	interface eth1
+	 ip address 16.0.0.1/23
+	 ipv6 address 1600:0:0:5::1/64
+	 mac address 00:00:00:aa:00:0a
+	!
+    }
+    canvas c1
+    iconcoords {320.0 50.0}
+    labelcoords {320.0 82.0}
+    services {IPForward}
+    interface-peer {eth1 n15}
+    interface-peer {eth0 n7}
+    interface-peer {eth2 n8}
+    interface-peer {eth3 n9}
+    interface-peer {eth4 n10}
+}
+
+node n6 {
+    type router
+    model router
+    network-config {
+	hostname n6-spine2
+	!
+	interface eth4
+	 ip address 16.0.6.38/30
+	 mac address 00:00:00:aa:00:30
+	!
+	interface eth3
+	 ip address 16.0.6.46/30
+	 mac address 00:00:00:aa:00:2c
+	!
+	interface eth1
+	 ip address 16.0.6.54/30
+	 mac address 00:00:00:aa:00:28
+	!
+	interface eth0
+	 ip address 16.0.6.62/30
+	 mac address 00:00:00:aa:00:26
+	!
+	interface eth2
+	 ip address 16.0.5.161/28
+	 ipv6 address 1600:0:0:6::1/64
+	 mac address 00:00:00:aa:00:29
+	!
+    }
+    canvas c1
+    iconcoords {725.0 47.0}
+    labelcoords {725.0 79.0}
+    services {IPForward}
+    interface-peer {eth2 n16}
+    interface-peer {eth0 n10}
+    interface-peer {eth1 n9}
+    interface-peer {eth3 n8}
+    interface-peer {eth4 n7}
+}
+
+node n7 {
+    type router
+    model router
+    network-config {
+	hostname n7-leaf1
+	!
+	interface eth3
+	 ip address 16.0.6.37/30
+	 mac address 00:00:00:aa:00:2f
+	!
+	interface eth2
+	 ip address 16.0.6.33/30
+	 mac address 00:00:00:aa:00:08
+	!
+	interface eth1
+	 ip address 16.0.6.6/30
+	 mac address 00:00:00:aa:00:04
+	!
+	interface eth0
+	 ip address 16.0.6.2/30
+	 mac address 00:00:00:aa:00:01
+	!
+    }
+    canvas c1
+    iconcoords {207.0 233.0}
+    labelcoords {207.0 265.0}
+    services {IPForward}
+    interface-peer {eth0 n1}
+    interface-peer {eth1 n2}
+    interface-peer {eth2 n5}
+    interface-peer {eth3 n6}
+}
+
+node n8 {
+    type router
+    model router
+    network-config {
+	hostname n8-leaf2
+	!
+	interface eth3
+	 ip address 16.0.6.41/30
+	 mac address 00:00:00:aa:00:2d
+	!
+	interface eth2
+	 ip address 16.0.6.45/30
+	 mac address 00:00:00:aa:00:2b
+	!
+	interface eth1
+	 ip address 16.0.6.14/30
+	 mac address 00:00:00:aa:00:13
+	!
+	interface eth0
+	 ip address 16.0.6.10/30
+	 mac address 00:00:00:aa:00:0f
+	!
+    }
+    canvas c1
+    iconcoords {450.0 227.0}
+    labelcoords {450.0 259.0}
+    services {IPForward}
+    interface-peer {eth0 n17}
+    interface-peer {eth1 n18}
+    interface-peer {eth2 n6}
+    interface-peer {eth3 n5}
+}
+
+node n9 {
+    type router
+    model router
+    network-config {
+	hostname n9-leaf3
+	!
+	interface eth3
+	 ip address 16.0.6.49/30
+	 mac address 00:00:00:aa:00:32
+	!
+	interface eth2
+	 ip address 16.0.6.53/30
+	 mac address 00:00:00:aa:00:27
+	!
+	interface eth1
+	 ip address 16.0.6.22/30
+	 mac address 00:00:00:aa:00:1b
+	!
+	interface eth0
+	 ip address 16.0.6.18/30
+	 mac address 00:00:00:aa:00:19
+	!
+    }
+    canvas c1
+    iconcoords {671.0 244.0}
+    labelcoords {671.0 276.0}
+    services {IPForward}
+    interface-peer {eth0 n21}
+    interface-peer {eth1 n22}
+    interface-peer {eth2 n6}
+    interface-peer {eth3 n5}
+}
+
+node n10 {
+    type router
+    model router
+    network-config {
+	hostname n10-leaf4
+	!
+	interface eth3
+	 ip address 16.0.6.57/30
+	 mac address 00:00:00:aa:00:34
+	!
+	interface eth2
+	 ip address 16.0.6.61/30
+	 mac address 00:00:00:aa:00:25
+	!
+	interface eth1
+	 ip address 16.0.6.30/30
+	 mac address 00:00:00:aa:00:24
+	!
+	interface eth0
+	 ip address 16.0.6.26/30
+	 mac address 00:00:00:aa:00:1f
+	!
+    }
+    canvas c1
+    iconcoords {888.0 236.0}
+    labelcoords {888.0 268.0}
+    services {IPForward}
+    interface-peer {eth0 n23}
+    interface-peer {eth1 n24}
+    interface-peer {eth2 n6}
+    interface-peer {eth3 n5}
+}
+
+node n11 {
+    type router
+    model host
+    network-config {
+	hostname n11
+	!
+	interface eth0
+	 ip address 16.0.2.10/24
+	 mac address 00:00:00:aa:00:03
+	!
+    }
+    canvas c1
+    iconcoords {150.0 476.0}
+    labelcoords {150.0 508.0}
+    services {SSH}
+    interface-peer {eth0 n3}
+}
+
+node n12 {
+    type router
+    model host
+    network-config {
+	hostname n12
+	!
+	interface eth0
+	 ip address 16.0.3.10/24
+	 mac address 00:00:00:aa:00:07
+	!
+    }
+    canvas c1
+    iconcoords {237.0 471.0}
+    labelcoords {237.0 503.0}
+    services {SSH}
+    interface-peer {eth0 n4}
+}
+
+node n13 {
+    type router
+    model host
+    network-config {
+	hostname n13
+	!
+	interface eth0
+	 ip address 16.0.4.10/25
+	 mac address 00:00:00:aa:00:0c
+	!
+    }
+    canvas c1
+    iconcoords {392.0 470.0}
+    labelcoords {392.0 502.0}
+    services {SSH}
+    interface-peer {eth0 n19}
+}
+
+node n14 {
+    type router
+    model host
+    network-config {
+	hostname n14
+	!
+	interface eth0
+	 ip address 16.0.5.70/27
+	 mac address 00:00:00:aa:00:10
+	!
+    }
+    canvas c1
+    iconcoords {487.0 471.0}
+    labelcoords {487.0 503.0}
+    services {SSH}
+    interface-peer {eth0 n20}
+}
+
+node n17 {
+    type router
+    model router
+    network-config {
+	hostname n17
+	!
+	interface eth1
+	 ip address 16.0.6.9/30
+	 mac address 00:00:00:aa:00:0e
+	!
+	interface eth0
+	 ip address 16.0.4.1/25
+	 mac address 00:00:00:aa:00:0d
+	!
+    }
+    canvas c1
+    iconcoords {396.0 322.0}
+    labelcoords {396.0 354.0}
+    services {IPForward}
+    interface-peer {eth0 n19}
+    interface-peer {eth1 n8}
+}
+
+node n18 {
+    type router
+    model router
+    network-config {
+	hostname n18
+	!
+	interface eth1
+	 ip address 16.0.6.13/30
+	 mac address 00:00:00:aa:00:12
+	!
+	interface eth0
+	 ip address 16.0.5.65/27
+	 mac address 00:00:00:aa:00:11
+	!
+    }
+    canvas c1
+    iconcoords {496.0 318.0}
+    labelcoords {496.0 350.0}
+    services {IPForward}
+    interface-peer {eth0 n20}
+    interface-peer {eth1 n8}
+}
+
+node n21 {
+    type router
+    model router
+    network-config {
+	hostname n21
+	!
+	interface eth1
+	 ip address 16.0.6.17/30
+	 mac address 00:00:00:aa:00:18
+	!
+	interface eth0
+	 ip address 16.0.4.129/25
+	 mac address 00:00:00:aa:00:16
+	!
+    }
+    canvas c1
+    iconcoords {631.0 325.0}
+    labelcoords {631.0 357.0}
+    services {IPForward}
+    interface-peer {eth0 n25}
+    interface-peer {eth1 n9}
+}
+
+node n22 {
+    type router
+    model router
+    network-config {
+	hostname n22
+	!
+	interface eth1
+	 ip address 16.0.6.21/30
+	 mac address 00:00:00:aa:00:1a
+	!
+	interface eth0
+	 ip address 16.0.5.1/26
+	 mac address 00:00:00:aa:00:17
+	!
+    }
+    canvas c1
+    iconcoords {715.0 327.0}
+    labelcoords {715.0 359.0}
+    services {IPForward}
+    interface-peer {eth0 n26}
+    interface-peer {eth1 n9}
+}
+
+node n23 {
+    type router
+    model router
+    network-config {
+	hostname n23
+	!
+	interface eth1
+	 ip address 16.0.6.25/30
+	 mac address 00:00:00:aa:00:1e
+	!
+	interface eth0
+	 ip address 16.0.5.97/27
+	 mac address 00:00:00:aa:00:1d
+	!
+    }
+    canvas c1
+    iconcoords {826.0 313.0}
+    labelcoords {826.0 345.0}
+    services {IPForward}
+    interface-peer {eth0 n27}
+    interface-peer {eth1 n10}
+}
+
+node n24 {
+    type router
+    model router
+    network-config {
+	hostname n24
+	!
+	interface eth1
+	 ip address 16.0.6.29/30
+	 mac address 00:00:00:aa:00:23
+	!
+	interface eth0
+	 ip address 16.0.5.129/27
+	 mac address 00:00:00:aa:00:22
+	!
+    }
+    canvas c1
+    iconcoords {939.0 308.0}
+    labelcoords {939.0 340.0}
+    services {IPForward}
+    interface-peer {eth0 n28}
+    interface-peer {eth1 n10}
+}
+
+node n29 {
+    type router
+    model host
+    network-config {
+	hostname n29
+	!
+	interface eth0
+	 ip address 16.0.4.140/25
+	 mac address 00:00:00:aa:00:14
+	!
+    }
+    canvas c1
+    iconcoords {635.0 455.0}
+    labelcoords {635.0 487.0}
+    services {SSH}
+    interface-peer {eth0 n25}
+}
+
+node n30 {
+    type router
+    model host
+    network-config {
+	hostname n30
+	!
+	interface eth0
+	 ip address 16.0.5.10/26
+	 mac address 00:00:00:aa:00:15
+	!
+    }
+    canvas c1
+    iconcoords {716.0 456.0}
+    labelcoords {716.0 488.0}
+    services {SSH}
+    interface-peer {eth0 n26}
+}
+
+node n31 {
+    type router
+    model host
+    network-config {
+	hostname n31
+	!
+	interface eth0
+	 ip address 16.0.5.100/27
+	 mac address 00:00:00:aa:00:1c
+	!
+    }
+    canvas c1
+    iconcoords {825.0 453.0}
+    labelcoords {825.0 485.0}
+    services {SSH}
+    interface-peer {eth0 n27}
+}
+
+node n32 {
+    type router
+    model host
+    network-config {
+	hostname n32
+	!
+	interface eth0
+	 ip address 16.0.5.131/27
+	 mac address 00:00:00:aa:00:20
+	!
+    }
+    canvas c1
+    iconcoords {912.0 456.0}
+    labelcoords {912.0 488.0}
+    services {SSH}
+    interface-peer {eth0 n28}
+}
+
+node n33 {
+    type router
+    model host
+    network-config {
+	hostname n33
+	!
+	interface eth0
+	 ip address 16.0.5.130/27
+	 mac address 00:00:00:aa:00:21
+	!
+    }
+    canvas c1
+    iconcoords {968.0 458.0}
+    labelcoords {968.0 490.0}
+    services {SSH}
+    interface-peer {eth0 n28}
+}
+
+node n34 {
+    type router
+    model host
+    network-config {
+	hostname n34
+	!
+	interface eth0
+	 ip address 16.0.0.10/23
+	 ipv6 address 1600:0:0:5::10/64
+	 mac address 00:00:00:aa:00:0b
+	!
+    }
+    canvas c1
+    iconcoords {86.0 65.0}
+    labelcoords {86.0 97.0}
+    services {SSH}
+    interface-peer {eth0 n15}
+}
+
+node n35 {
+    type router
+    model host
+    network-config {
+	hostname n35
+	!
+	interface eth0
+	 ip address 16.0.5.170/28
+	 ipv6 address 1600:0:0:6::10/64
+	 mac address 00:00:00:aa:00:2a
+	!
+    }
+    canvas c1
+    iconcoords {965.0 47.0}
+    labelcoords {965.0 79.0}
+    services {SSH}
+    interface-peer {eth0 n16}
+}
+
+node n3 {
+    type hub
+    network-config {
+	hostname n3
+	!
+    }
+    canvas c1
+    iconcoords {153.0 392.0}
+    labelcoords {153.0 416.0}
+    interface-peer {e0 n1}
+    interface-peer {e1 n11}
+}
+
+node n4 {
+    type hub
+    network-config {
+	hostname n4
+	!
+    }
+    canvas c1
+    iconcoords {242.0 379.0}
+    labelcoords {242.0 403.0}
+    interface-peer {e0 n2}
+    interface-peer {e1 n12}
+}
+
+node n15 {
+    type lanswitch
+    network-config {
+	hostname n15
+	!
+    }
+    canvas c1
+    iconcoords {222.0 55.0}
+    labelcoords {222.0 79.0}
+    interface-peer {e0 n5}
+    interface-peer {e1 n34}
+}
+
+node n16 {
+    type lanswitch
+    network-config {
+	hostname n16
+	!
+    }
+    canvas c1
+    iconcoords {848.0 48.0}
+    labelcoords {848.0 72.0}
+    interface-peer {e0 n6}
+    interface-peer {e1 n35}
+}
+
+node n19 {
+    type hub
+    network-config {
+	hostname n19
+	!
+    }
+    canvas c1
+    iconcoords {396.0 397.0}
+    labelcoords {396.0 421.0}
+    interface-peer {e0 n13}
+    interface-peer {e1 n17}
+}
+
+node n20 {
+    type hub
+    network-config {
+	hostname n20
+	!
+    }
+    canvas c1
+    iconcoords {493.0 397.0}
+    labelcoords {493.0 421.0}
+    interface-peer {e0 n14}
+    interface-peer {e1 n18}
+}
+
+node n25 {
+    type hub
+    network-config {
+	hostname n25
+	!
+    }
+    canvas c1
+    iconcoords {634.0 392.0}
+    labelcoords {634.0 416.0}
+    interface-peer {e0 n29}
+    interface-peer {e1 n21}
+}
+
+node n26 {
+    type hub
+    network-config {
+	hostname n26
+	!
+    }
+    canvas c1
+    iconcoords {718.0 388.0}
+    labelcoords {718.0 412.0}
+    interface-peer {e0 n30}
+    interface-peer {e1 n22}
+}
+
+node n27 {
+    type hub
+    network-config {
+	hostname n27
+	!
+    }
+    canvas c1
+    iconcoords {825.0 383.0}
+    labelcoords {825.0 407.0}
+    interface-peer {e0 n31}
+    interface-peer {e1 n23}
+}
+
+node n28 {
+    type hub
+    network-config {
+	hostname n28
+	!
+    }
+    canvas c1
+    iconcoords {936.0 388.0}
+    labelcoords {936.0 412.0}
+    interface-peer {e0 n32}
+    interface-peer {e1 n33}
+    interface-peer {e2 n24}
+}
+
+link l1 {
+    nodes {n3 n1}
+}
+
+link l2 {
+    nodes {n3 n11}
+}
+
+link l3 {
+    nodes {n4 n2}
+}
+
+link l4 {
+    nodes {n4 n12}
+}
+
+link l5 {
+    nodes {n15 n5}
+}
+
+link l6 {
+    nodes {n15 n34}
+}
+
+link l7 {
+    nodes {n16 n6}
+}
+
+link l8 {
+    nodes {n16 n35}
+}
+
+link l9 {
+    nodes {n19 n13}
+}
+
+link l10 {
+    nodes {n19 n17}
+}
+
+link l11 {
+    nodes {n20 n14}
+}
+
+link l12 {
+    nodes {n20 n18}
+}
+
+link l13 {
+    nodes {n25 n29}
+}
+
+link l14 {
+    nodes {n25 n21}
+}
+
+link l15 {
+    nodes {n26 n30}
+}
+
+link l16 {
+    nodes {n26 n22}
+}
+
+link l17 {
+    nodes {n27 n31}
+}
+
+link l18 {
+    nodes {n27 n23}
+}
+
+link l19 {
+    nodes {n28 n32}
+}
+
+link l20 {
+    nodes {n28 n33}
+}
+
+link l21 {
+    nodes {n28 n24}
+}
+
+link l22 {
+    nodes {n1 n7}
+}
+
+link l23 {
+    nodes {n7 n2}
+}
+
+link l24 {
+    nodes {n7 n5}
+}
+
+link l25 {
+    nodes {n17 n8}
+}
+
+link l26 {
+    nodes {n18 n8}
+}
+
+link l27 {
+    nodes {n21 n9}
+}
+
+link l28 {
+    nodes {n22 n9}
+}
+
+link l29 {
+    nodes {n23 n10}
+}
+
+link l30 {
+    nodes {n24 n10}
+}
+
+link l31 {
+    nodes {n10 n6}
+}
+
+link l32 {
+    nodes {n9 n6}
+}
+
+link l33 {
+    nodes {n8 n6}
+}
+
+link l34 {
+    nodes {n8 n5}
+}
+
+link l35 {
+    nodes {n7 n6}
+}
+
+link l36 {
+    nodes {n5 n9}
+}
+
+link l37 {
+    nodes {n5 n10}
+}
+
+canvas c1 {
+    name {Canvas1}
+}
+
+option global {
+    interface_names no
+    ip_addresses no
+    ipv6_addresses no
+    node_labels yes
+    link_labels yes
+    show_api no
+    background_images no
+    annotations yes
+    grid yes
+    traffic_start 0
+}
+
+option session {
+    controlnet=
+    controlnet0=
+    controlnet1=
+    controlnet2=
+    controlnet3=
+    controlnet_updown_script=
+    enablerj45=1
+    enablesdt=0
+    ovs=0
+    preservedir=0
+    sdturl=tcp://127.0.0.1:50000/
+}
+
