@@ -49,8 +49,8 @@ A y B pueden probar todo en su propia máquina con `127.0.0.1` antes de tocar CO
 - [ ] **26.d** — capturar con Wireshark y mostrar el **formato del datagrama UDP**
       (4 campos: puerto origen, destino, longitud, checksum) y su encapsulación en IP.
 
-### Persona B — TCP
-- [ ] **27.a** — `src/tcp_send.py` y `src/tcp_recv.py` (ya están escritos, probarlos)
+### Persona B — TCP  ·  **MATÍAS** 🔵  _(en curso)_
+- [x] **27.a** — `src/tcp_send.py` y `src/tcp_recv.py` — escritos y **probados OK** (60 KB, byte a byte)
 - [ ] **27.b** — interoperar con netcat:
       - `nc -N -l 8000 > /tmp/file-out`  ← contra nuestro `tcp_send.py`
       - `cat /tmp/file-in | nc -N <IP> 8000` → contra nuestro `tcp_recv.py`

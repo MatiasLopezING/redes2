@@ -5,7 +5,8 @@ Uso:  python3 tcp_recv.py <puerto> <archivo_salida> [--lento]
 Ej:   python3 tcp_recv.py 8000 /tmp/file-out
       python3 tcp_recv.py 8000 /tmp/file-out --lento   (punto 27.g)
 
---lento: buffer de recepcion chico + lectura demorada. Fuerza que la
+--lento: buffer de recepcion chico + lectura demorada (~10 KB/s).
+         Fuerza que la
          aplicacion no consuma, la ventana anunciada caiga y se active
          el CONTROL DE FLUJO (se ve como TCP ZeroWindow en Wireshark).
 """
@@ -29,12 +30,12 @@ c, origen = s.accept()
 recibidos = 0
 with open(salida, "wb") as f:
     while True:
-        bloque = c.recv(512 if lento else 4096)
+        bloque = c.recv(1024 if lento else 4096)
         if not bloque:               # recv() vacio = llego el FIN
             break
         f.write(bloque)
         recibidos += len(bloque)
         if lento:
-            time.sleep(0.5)
+            time.sleep(0.1)      # ~10 KB/s: suficiente para que la ventana se cierre
 c.close(); s.close()
 print(f"recibidos {recibidos} bytes de {origen[0]} -> {salida}")

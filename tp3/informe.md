@@ -61,15 +61,64 @@ Código: `src/udp_send.py` y `src/udp_recv.py`.
 
 ## 27.a — Programas de envío y recepción
 
-> _Describir los programas y el uso de `shutdown(SHUT_WR)`._
+Se programaron dos aplicaciones en **Python 3** sobre la API de sockets
+(`socket.AF_INET`, `socket.SOCK_STREAM`), sin dependencias externas:
+`src/tcp_send.py` (cliente, corre en **n34**) y `src/tcp_recv.py`
+(servidor, corre en **n33**).
 
-Código: `src/tcp_send.py` y `src/tcp_recv.py`.
+**Emisor** — `connect()` al par `(IP, puerto)`, lee el archivo en bloques de
+4096 B y los entrega con `sendall()`, que garantiza que se escriban todos los
+bytes. Al terminar llama a **`shutdown(SHUT_WR)`**: envía el **FIN** y deja la
+conexión en *medio cierre*, con este extremo ya sin transmitir pero todavía
+capaz de recibir.
+
+**Receptor** — `bind()` + `listen()` + `accept()`, y lee con `recv()` hasta que
+devuelve una secuencia vacía. **Ese `recv()` vacío es la señal del FIN**: no hace
+falta ningún marcador de fin de archivo a nivel aplicación, porque TCP es un
+flujo con cierre explícito. (Contrasta con UDP, donde sí hubo que inventarlo:
+ver punto 26.a.)
+
+Se usa `SO_REUSEADDR` para poder relanzar el servidor sin esperar el `TIME_WAIT`
+de la conexión anterior.
+
+**Verificación:** se transfirió un archivo de 200 KB de n34 a n33 y se comparó
+con `md5sum` en ambos extremos.
 
 ![](capturas/)
 
+## 27.a.bis — Observaciones sobre la captura
+
+En Wireshark se distinguen las tres fases de la sesión:
+
+| Fase | Segmentos | Flags |
+|---|---|---|
+| Establecimiento | 3 | `SYN` · `SYN,ACK` · `ACK` |
+| Transferencia | N | `PSH,ACK` del emisor · `ACK` del receptor |
+| Cierre | 3 o 4 | `FIN,ACK` · (`ACK`) · `FIN,ACK` · `ACK` |
+
+El cierre se ve en **3 segmentos** cuando el receptor, que no tiene más datos
+que enviar, combina su `ACK` con su propio `FIN` en el mismo segmento. Son
+igualmente **4 acciones**: TCP es full-duplex y cada sentido se cierra por
+separado.
+
 ## 27.b — Interacción con netcat
 
-> _`nc -N` en las dos direcciones._
+Se verificó la interoperabilidad **en las dos direcciones**:
+
+| Emisor | Receptor | Comando del receptor |
+|---|---|---|
+| `tcp_send.py` (n34) | **netcat** (n33) | `nc -N -l 8000 > /tmp/file-nc` |
+| **netcat** (n34) | `tcp_recv.py` (n33) | `cat /tmp/file-in \| nc -N 16.0.5.130 8000` |
+
+En los dos casos el archivo llegó íntegro (`md5sum` coincidente).
+
+**Por qué interoperan:** ninguno de los dos programas define un protocolo de
+aplicación propio — los dos escriben y leen un **flujo de bytes TCP puro**, así
+que son intercambiables. El único detalle que hay que respetar es **quién cierra
+y cuándo**: `tcp_send.py` llama a `shutdown(SHUT_WR)` y `nc -N` cierra la mitad
+de escritura al terminar su entrada. Ambos producen el mismo **FIN**, que es lo
+que hace que el receptor sepa que el archivo terminó. Sin ese FIN el receptor
+quedaría bloqueado en `recv()` indefinidamente.
 
 ![](capturas/)
 
@@ -101,13 +150,75 @@ Código: `src/tcp_send.py` y `src/tcp_recv.py`.
 
 ## 27.g — Activación del control de flujo
 
-> _Receptor en modo `--lento`. Capturar `TCP ZeroWindow` y `Window Update`._
+Para forzar el control de flujo se corrió el receptor en modo `--lento`, que
+combina dos cosas: un buffer de recepción reducido
+(`setsockopt(SO_RCVBUF, 2048)`, que el kernel redondea a **4096 B**) y una
+demora entre lecturas, dejando un consumo efectivo de **~10 KB/s**. El emisor,
+en cambio, transmite a la velocidad del enlace.
+
+**Secuencia observada en la captura:**
+
+1. Los ACK de n33 anuncian una ventana **decreciente**: `Win=4096 → 3072 → 2048 → 1024`.
+2. Aparece **`[TCP ZeroWindow]`**: n33 anuncia `Win=0`, su buffer está lleno.
+3. n34 **detiene la transmisión** y envía **`[TCP ZeroWindowProbe]`**: segmentos
+   de 1 byte que preguntan periódicamente si se liberó espacio. Existen para
+   evitar un *deadlock*: si el emisor esperara pasivamente y el ACK que reabre
+   la ventana se perdiera, la conexión quedaría trabada para siempre.
+4. Cuando la aplicación lee, n33 envía **`[TCP Window Update]`** con `Win>0` y
+   la transferencia se reanuda.
+5. El ciclo se repite durante toda la transferencia.
+
+**Medición:** con la ventana del receptor en 4096 B, el ritmo efectivo quedó
+fijado en **10,0 KB/s** — exactamente la velocidad a la que la aplicación
+consume. El emisor no manda más rápido aunque pueda.
+
+**Observación:** el control de flujo frena al **TCP** del emisor, no
+inmediatamente a la aplicación. Mientras haya lugar en el buffer de envío del
+socket (`SO_SNDBUF`, del orden de los MB), `sendall()` retorna enseguida y los
+bytes quedan encolados en el kernel. Recién cuando ese buffer se llena la
+aplicación se bloquea: en una prueba con 3 MB, `sendall()` quedó bloqueado
+**61,8 s** tras haber colocado ~2,1 MB.
 
 ![](capturas/)
 
 ## 27.h — Pérdida en un enlace
 
-> _Qué control de TCP se activa y por qué (congestión, no flujo)._
+Se agregó **5 % de pérdida** a un enlace del camino n34→n33 (en CORE: botón
+derecho sobre el enlace → *Configure* → *loss*; equivale a
+`tc qdisc add dev ethX root netem loss 5%`) y se repitió la transferencia con
+el receptor en modo normal.
+
+**Qué se activa: el CONTROL DE CONGESTIÓN**, no el de flujo.
+
+El receptor consume a toda velocidad, así que su ventana (`rwnd`) nunca se
+achica. Lo que cambia es que se pierden segmentos, y el emisor lo detecta de
+dos maneras:
+
+| Evento | Cómo lo detecta | Reacción |
+|---|---|---|
+| **3 ACK duplicados** | el receptor repite el mismo ACK | **Fast Retransmit** + Fast Recovery: `ssthresh = cwnd/2`, `cwnd = ssthresh` |
+| **Timeout (RTO)** | no llega ningún ACK | `ssthresh = cwnd/2`, **`cwnd = 1`** y vuelve a Slow Start |
+
+**En la captura se observan:** `[TCP Retransmission]`,
+`[TCP Fast Retransmission]`, `[TCP Dup ACK]` y `[TCP Out-Of-Order]`.
+El gráfico *Time Sequence (Stevens)* muestra los tramos planos donde la ventana
+de congestión se derrumba y vuelve a crecer.
+
+**El archivo llega íntegro igual:** TCP se recupera solo retransmitiendo desde
+el primer byte no reconocido. La pérdida se paga en **tiempo**, no en datos.
+
+### Resumen: los dos controles
+
+| | Control de **FLUJO** (27.g) | Control de **CONGESTIÓN** (27.h) |
+|---|---|---|
+| Protege a | el **receptor** (su buffer) | la **red** (routers y enlaces) |
+| Variable | `rwnd` | `cwnd` |
+| Quién la fija | el receptor, **explícitamente** en el campo Window | el emisor, **por inferencia** |
+| Se dispara con | una aplicación que no lee | pérdidas: timeout o 3 ACK duplicados |
+| Alcance | extremo a extremo, 2 equipos | toda la red, muchos flujos |
+
+El emisor transmite como máximo **`min(cwnd, rwnd)`** bytes sin confirmar: en
+27.g el que limita es `rwnd`, en 27.h es `cwnd`.
 
 ![](capturas/)
 
