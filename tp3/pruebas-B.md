@@ -1,4 +1,4 @@
-# Parte B (Matías) — Guion de pruebas TCP
+﻿# Parte B (Matías) — Guion de pruebas TCP
 
 Incisos **27.a · 27.b · 27.g · 27.h**.
 Cada bloque es: *qué comando tipear* → *qué hay que ver* → *qué captura sacar*.
