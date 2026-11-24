@@ -38,8 +38,8 @@ Dirección de trabajo que pide el enunciado: **n34 (emisor) → n33 (receptor)**
 Armada para que **nadie espere a nadie**: los tres arrancan el minuto cero.
 A y B pueden probar todo en su propia máquina con `127.0.0.1` antes de tocar CORE.
 
-### Persona A — UDP
-- [ ] **26.a** — `src/udp_send.py` y `src/udp_recv.py` (ya están escritos, probarlos)
+### Persona A — UDP ·  **LAUTARO** (en curso)
+- [x] **26.a** — `src/udp_send.py` y `src/udp_recv.py` (escritos y probados con hash sha-256).
 - [ ] **26.b** — interoperar con netcat en las dos direcciones:
       - `nc -u -l 8000 > /tmp/file-out`  ← contra nuestro `udp_send.py`
       - `cat /tmp/file-in | nc -u <IP> 8000` → contra nuestro `udp_recv.py`

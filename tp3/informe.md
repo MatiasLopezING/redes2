@@ -30,9 +30,25 @@ Programas utilizados: ver `src/README.md`.
 
 ## 26.a — Programas de envío y recepción
 
-> _Describir los dos programas, la elección del lenguaje y el criterio de fin de archivo._
+Descripción de los programas
+Para realizar la transferencia de archivos mediante UDP se desarrollaron dos programas en Python: un cliente emisor (udp_send.py) y un servidor receptor (udp_recv.py).
 
-Código: `src/udp_send.py` y `src/udp_recv.py`.
+**Programa emisor — udp_send.py**
+El programa emisor recibe como argumentos la dirección IP del nodo destino, el puerto UDP y la ruta del archivo que se desea transmitir.
+Inicialmente, abre el archivo en modo lectura binaria. Luego, lee su contenido en bloques de hasta 1024 bytes y envía cada bloque mediante la función `sendto()` de un socket UDP IPv4.
+Al finalizar la lectura del archivo, el cliente envía un datagrama vacío para indicar que no quedan más datos por transmitir.
+
+**Programa receptor — udp_recv.py**
+El programa receptor recibe como argumentos el puerto UDP en el que debe escuchar y la ruta del archivo de salida.
+Crea un socket UDP IPv4 y lo asocia al puerto especificado mediante `bind()`. Una vez iniciado, permanece esperando datagramas utilizando `recvfrom()`.
+Cada datagrama recibido se escribe en el archivo de salida. Cuando recibe un datagrama vacío, interpreta que la transferencia ha finalizado, cierra el archivo y termina la recepción.
+
+**Criterio de fin de archivo**
+
+UDP no proporciona un mecanismo propio para indicar el fin de una transferencia de archivo. Por este motivo, se implementó un criterio de finalización a nivel de aplicación.
+El cliente envía un datagrama de longitud cero cuando termina de leer el archivo. El servidor identifica este datagrama porque su contenido es una cadena de bytes vacía (b'') y lo interpreta como una señal de fin de archivo.
+De esta manera, el receptor puede distinguir entre los datagramas que contienen datos y el datagrama especial que indica la finalización de la transferencia.
+Este mecanismo permite delimitar el archivo recibido, aunque no incorpora por sí mismo mecanismos de confirmación, retransmisión o control de pérdida de datagramas.
 
 ![](capturas/)
 
