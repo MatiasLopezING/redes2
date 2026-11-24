@@ -1,10 +1,11 @@
-# Parte B - UDP
+# Inciso A
 
 ## Preparación
 
 En CORE, abrir una terminal en cada nodo:
 - n33: servidor/receptor.
 - n34: cliente/emisor.
+
 En n34, preparar el archivo de prueba:
 
 ```bash
