@@ -52,11 +52,18 @@ Este mecanismo permite delimitar el archivo recibido, aunque no incorpora por s�
 
 ![](capturas/)
 
+*Figura 1. Archivo de prueba generado en el nodo n34 y cálculo de su hash SHA-256.*
+*Figura 2. Envío del archivo desde n34 y recepción de los datagramas UDP en n33.*
+*Figura 3. Verificación del contenido y de la integridad del archivo recibido mediante SHA-256.*
+
 ## 26.b — Interacción con netcat
 
 > _Mostrar las dos direcciones: nuestro cliente contra `nc -u -l`, y `nc -u` contra nuestro servidor._
 
 ![](capturas/)
+*Figura X. Ejecución del programa receptor Python en n33.*
+*Figura X. Transmisión del archivo desde n34 mediante netcat utilizando UDP.*
+*Figura X. Verificación del archivo recibido y comparación de su hash SHA-256.*
 
 ## 26.c — Envío sin servidor corriendo, estados y pérdida
 

@@ -40,7 +40,7 @@ A y B pueden probar todo en su propia máquina con `127.0.0.1` antes de tocar CO
 
 ### Persona A — UDP ·  **LAUTARO** (en curso)
 - [x] **26.a** — `src/udp_send.py` y `src/udp_recv.py` (escritos y probados con hash sha-256).
-- [ ] **26.b** — interoperar con netcat en las dos direcciones:
+- [x] **26.b** — interoperar con netcat en las dos direcciones:
       - `nc -u -l 8000 > /tmp/file-out`  ← contra nuestro `udp_send.py`
       - `cat /tmp/file-in | nc -u <IP> 8000` → contra nuestro `udp_recv.py`
 - [ ] **26.c** — enviar datos **antes** de levantar el servidor; ver cómo lo notifica
